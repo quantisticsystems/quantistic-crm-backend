@@ -1,18 +1,16 @@
 {
   "name": "quantistic-crm-backend",
   "version": "1.0.0",
-  "description": "Webhook backend for Quantistic Systems CRM",
+  "description": "Quantistic Systems CRM Backend",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "npx nodemon server.js"
+    "start": "node server.js"
   },
   "dependencies": {
-  "express": "^4.18.2",
-  "@supabase/supabase-js": "^2.0.0"
-}
+    "express": "^4.18.2",
+    "@supabase/supabase-js": "^2.0.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=18.0.0"
   }
 }
