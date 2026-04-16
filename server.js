@@ -124,19 +124,34 @@ app.post('/api/appointments', auth, async (req, res) => {
   const id  = 'appt_' + crypto.randomUUID().slice(0, 8);
   const now = new Date().toISOString();
 
-  const appt = { id, lead_id, homeowner_name, property_address, postcode, valuer_name: valuer_name || 'TBC', date, time, status: 'confirmed', created_at: now };
+  const appt = {
+    id,
+    lead_id,
+    homeowner_name,
+    property_address,
+    postcode,
+    valuer_name: valuer_name || 'TBC',
+    date,
+    time,
+    status: 'confirmed',
+    created_at: now
+  };
 
   const { error } = await supabase.from('appointments').insert(appt);
   if (error) return res.status(500).json({ error: error.message });
 
   if (lead_id) {
+    const { data: existingLead } = await supabase.from('leads').select('events').eq('id', lead_id).single();
+    const leadEvents = existingLead?.events || [];
+    leadEvents.push({ done: true, text: `Valuation booked — ${date} at ${time}`, ts: now });
+
     await supabase.from('leads').update({
       stage: 'conf',
       appointment_date: date,
       appointment_time: time,
-      valuer_name,
+      valuer_name: valuer_name || 'TBC',
       updated_at: now,
-      events: supabase.rpc('append_event', { lead_id, event_text: `Valuation booked — ${date} at ${time}` })
+      events: leadEvents
     }).eq('id', lead_id);
   }
 
