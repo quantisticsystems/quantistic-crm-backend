@@ -38,14 +38,24 @@ app.get('/', (req, res) => {
 
 // ── Leads ──
 app.post('/api/leads', auth, async (req, res) => {
-  const { homeowner_name, property_address, postcode, channel, stage, timeline, phone, email, enquiry_time } = req.body;
+  const {
+    agency_id, homeowner_name, property_address, postcode,
+    channel, stage, timeline, phone, email, enquiry_time,
+    pipeline, monthly_rent, confidence, source, event_text, notes
+  } = req.body;
   if (!homeowner_name) return res.status(400).json({ error: 'homeowner_name is required' });
 
   const id  = 'lead_' + crypto.randomUUID().slice(0, 8);
   const now = enquiry_time || new Date().toISOString();
+  const tenant = agency_id || 'quantistic';
+
+  const initialEvent = event_text
+    ? { done: true, text: event_text, ts: now }
+    : { done: true, text: `Enquiry received via ${channel || 'email'}`, ts: now };
 
   const lead = {
     id,
+    agency_id: tenant,
     homeowner_name,
     property_address: property_address || '',
     postcode: postcode || '',
@@ -54,9 +64,14 @@ app.post('/api/leads', auth, async (req, res) => {
     timeline: timeline || 'Unknown',
     phone: phone || '',
     email: email || '',
+    pipeline: pipeline || null,
+    monthly_rent: typeof monthly_rent === 'number' ? monthly_rent : null,
+    confidence: typeof confidence === 'number' ? confidence : null,
+    source: source || null,
+    notes: notes || '',
     created_at: now,
     updated_at: now,
-    events: [{ done: true, text: `Enquiry received via ${channel || 'email'}`, ts: now }]
+    events: [initialEvent]
   };
 
   const { error } = await supabase.from('leads').insert(lead);
@@ -67,6 +82,7 @@ app.post('/api/leads', auth, async (req, res) => {
 
   await supabase.from('events').insert({
     id: crypto.randomUUID(),
+    agency_id: tenant,
     type: 'new_lead',
     description: `${homeowner_name} enquired via ${channel || 'email'}`,
     level: 'info',
@@ -80,7 +96,7 @@ app.patch('/api/leads/:id', auth, async (req, res) => {
   const { data: existing, error: fetchError } = await supabase.from('leads').select('*').eq('id', req.params.id).single();
   if (fetchError || !existing) return res.status(404).json({ error: 'Lead not found' });
 
-  const allowed = ['stage','timeline','phone','email','property_address','postcode','valuer_name','appointment_date','appointment_time','notes'];
+  const allowed = ['stage','timeline','phone','email','property_address','postcode','valuer_name','appointment_date','appointment_time','notes','pipeline','monthly_rent','confidence','source'];
   const updates = { updated_at: new Date().toISOString() };
   allowed.forEach(k => { if (req.body[k] !== undefined) updates[k] = req.body[k]; });
 
@@ -95,6 +111,7 @@ app.patch('/api/leads/:id', auth, async (req, res) => {
 
   await supabase.from('events').insert({
     id: crypto.randomUUID(),
+    agency_id: existing.agency_id || 'quantistic',
     type: 'stage_update',
     description: `${existing.homeowner_name} → ${updates.stage || existing.stage}`,
     level: 'success',
@@ -105,9 +122,26 @@ app.patch('/api/leads/:id', auth, async (req, res) => {
 });
 
 app.get('/api/leads', auth, async (req, res) => {
-  const { data, error } = await supabase.from('leads').select('*').order('created_at', { ascending: false });
+  let query = supabase.from('leads').select('*').order('created_at', { ascending: false });
+  if (req.query.agency_id) query = query.eq('agency_id', req.query.agency_id);
+  if (req.query.pipeline)  query = query.eq('pipeline',  req.query.pipeline);
+  const { data, error } = await query;
   if (error) return res.status(500).json({ error: error.message });
   res.json({ leads: data, total: data.length });
+});
+
+app.get('/api/leads/pipelines', auth, async (req, res) => {
+  if (!req.query.agency_id) return res.status(400).json({ error: 'agency_id query param is required' });
+  const { data, error } = await supabase
+    .from('leads')
+    .select('*')
+    .eq('agency_id', req.query.agency_id)
+    .order('created_at', { ascending: false });
+  if (error) return res.status(500).json({ error: error.message });
+  const lettings = data.filter(l => l.pipeline === 'lettings');
+  const sales    = data.filter(l => l.pipeline === 'sales');
+  const other    = data.filter(l => l.pipeline !== 'lettings' && l.pipeline !== 'sales');
+  res.json({ agency_id: req.query.agency_id, lettings, sales, other, total: data.length });
 });
 
 app.get('/api/leads/:id', auth, async (req, res) => {
@@ -118,14 +152,16 @@ app.get('/api/leads/:id', auth, async (req, res) => {
 
 // ── Appointments ──
 app.post('/api/appointments', auth, async (req, res) => {
-  const { lead_id, homeowner_name, property_address, postcode, valuer_name, date, time } = req.body;
+  const { agency_id, lead_id, homeowner_name, property_address, postcode, valuer_name, date, time } = req.body;
   if (!homeowner_name) return res.status(400).json({ error: 'homeowner_name is required' });
 
   const id  = 'appt_' + crypto.randomUUID().slice(0, 8);
   const now = new Date().toISOString();
+  const tenant = agency_id || 'quantistic';
 
   const appt = {
     id,
+    agency_id: tenant,
     lead_id,
     homeowner_name,
     property_address,
@@ -157,6 +193,7 @@ app.post('/api/appointments', auth, async (req, res) => {
 
   await supabase.from('events').insert({
     id: crypto.randomUUID(),
+    agency_id: tenant,
     type: 'appointment',
     description: `${homeowner_name} booked for ${date} at ${time}`,
     level: 'success',
@@ -167,7 +204,9 @@ app.post('/api/appointments', auth, async (req, res) => {
 });
 
 app.get('/api/appointments', auth, async (req, res) => {
-  const { data, error } = await supabase.from('appointments').select('*').order('date', { ascending: true });
+  let query = supabase.from('appointments').select('*').order('date', { ascending: true });
+  if (req.query.agency_id) query = query.eq('agency_id', req.query.agency_id);
+  const { data, error } = await query;
   if (error) return res.status(500).json({ error: error.message });
   res.json({ appointments: data, total: data.length });
 });
@@ -175,7 +214,9 @@ app.get('/api/appointments', auth, async (req, res) => {
 // ── Events ──
 app.get('/api/events', auth, async (req, res) => {
   const limit = parseInt(req.query.limit) || 50;
-  const { data, error } = await supabase.from('events').select('*').order('ts', { ascending: false }).limit(limit);
+  let query = supabase.from('events').select('*').order('ts', { ascending: false }).limit(limit);
+  if (req.query.agency_id) query = query.eq('agency_id', req.query.agency_id);
+  const { data, error } = await query;
   if (error) return res.status(500).json({ error: error.message });
   res.json({ events: data });
 });
