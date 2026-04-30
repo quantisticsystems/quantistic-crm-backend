@@ -36,6 +36,29 @@ app.get('/', (req, res) => {
   res.json({ status: 'ok', message: 'Quantistic CRM Backend — Supabase powered' });
 });
 
+// ── Generic app state (key-value JSON store for client-side dashboards) ──
+app.get('/api/state/:key', auth, async (req, res) => {
+  const { data, error } = await supabase
+    .from('app_state')
+    .select('value, updated_at')
+    .eq('key', req.params.key)
+    .maybeSingle();
+  if (error) return res.status(500).json({ error: error.message });
+  if (!data) return res.json({ value: null, updated_at: null });
+  res.json({ value: data.value, updated_at: data.updated_at });
+});
+
+app.put('/api/state/:key', auth, async (req, res) => {
+  const value = req.body && Object.prototype.hasOwnProperty.call(req.body, 'value') ? req.body.value : req.body;
+  const { data, error } = await supabase
+    .from('app_state')
+    .upsert({ key: req.params.key, value: value || {}, updated_at: new Date().toISOString() }, { onConflict: 'key' })
+    .select('updated_at')
+    .single();
+  if (error) return res.status(500).json({ error: error.message });
+  res.json({ ok: true, updated_at: data.updated_at });
+});
+
 // ── Leads ──
 app.post('/api/leads', auth, async (req, res) => {
   const {
