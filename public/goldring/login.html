@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goldring Designs — Sign in</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f5f1;--paper:#fff;--paper2:#fafaf7;
+  --ink:#0d0d0d;--ink2:#3b3b3b;--ink3:#7a7a7a;--ink4:#a8a8a8;
+  --rule:#e6e3dd;--rule2:#d0ccc4;
+  --accent:#5e4a1a;--accent-soft:#f5f0e3;--gold:#d4a843;
+  --grn:#2d6e2d;--red:#a83232;
+}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--ink);font-size:13.5px;line-height:1.55;letter-spacing:-.005em;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background-image:radial-gradient(circle at 70% 20%,rgba(212,168,67,.08) 0,transparent 50%),radial-gradient(circle at 20% 80%,rgba(94,74,26,.04) 0,transparent 50%)}
+
+.shell{display:grid;grid-template-columns:1fr 1.1fr;width:100%;max-width:920px;background:var(--paper);border-radius:12px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.04);border:1px solid var(--rule)}
+
+.aside{background:linear-gradient(135deg,#0d0d0d 0%,#1a1612 100%);color:#f0eee8;padding:48px 44px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.aside:after{content:"";position:absolute;top:-30%;right:-20%;width:480px;height:480px;background:radial-gradient(circle,rgba(212,168,67,.16) 0%,transparent 70%)}
+.brand{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+.brand-mark{width:56px;height:56px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:8px}
+.brand-mark img{max-width:100%;height:auto;display:block}
+.brand-t{font-family:'Source Serif 4',serif;font-size:18px;font-weight:500;letter-spacing:-.01em;color:#fff;line-height:1.15}
+.brand-s{font-size:10.5px;color:var(--gold);letter-spacing:.16em;text-transform:uppercase;font-weight:600;margin-top:3px}
+
+.aside-mid{position:relative;z-index:1;margin:48px 0}
+.aside-eyebrow{font-size:10.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:12px}
+.aside-h{font-family:'Source Serif 4',serif;font-size:32px;font-weight:500;letter-spacing:-.015em;color:#fff;line-height:1.18;margin-bottom:14px}
+.aside-h em{font-style:italic;color:var(--gold)}
+.aside-d{font-size:13px;color:#a09c93;line-height:1.65;max-width:360px}
+
+.aside-foot{position:relative;z-index:1;font-size:11px;color:#7a7770;letter-spacing:.04em}
+.aside-foot b{color:var(--gold);font-weight:500;letter-spacing:.08em}
+
+.form{padding:48px 44px;display:flex;flex-direction:column;justify-content:center;background:var(--paper)}
+.form-h{font-family:'Source Serif 4',serif;font-size:24px;font-weight:500;letter-spacing:-.01em;margin-bottom:6px}
+.form-d{font-size:12.5px;color:var(--ink3);margin-bottom:28px}
+
+.field{margin-bottom:16px}
+.field label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);font-weight:600;margin-bottom:6px}
+.field input{width:100%;padding:11px 14px;border:1px solid var(--rule2);border-radius:6px;font-size:13.5px;font-family:inherit;outline:none;background:var(--paper);color:var(--ink);transition:border-color .15s,box-shadow .15s}
+.field input:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(13,13,13,.06)}
+.field input::placeholder{color:var(--ink4)}
+
+.btn{display:flex;align-items:center;justify-content:center;width:100%;padding:12px 14px;border-radius:6px;font-size:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;font-family:inherit;cursor:pointer;font-weight:500;letter-spacing:.01em;transition:all .15s}
+.btn:hover{background:#222}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn .spinner{display:none;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-right:8px}
+.btn.loading .spinner{display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.alert{padding:10px 14px;border-radius:6px;font-size:12px;margin-bottom:14px;display:none}
+.alert.show{display:block}
+.alert.err{background:#f5e3e3;color:var(--red);border:1px solid rgba(168,50,50,.2)}
+.alert.ok{background:#e8f1e8;color:var(--grn);border:1px solid rgba(45,110,45,.2)}
+
+.foot-line{font-size:11px;color:var(--ink3);margin-top:24px;padding-top:18px;border-top:1px solid var(--rule);text-align:center}
+.foot-line a{color:var(--accent);border-bottom:1px solid var(--rule2)}
+
+@media (max-width:780px){
+  .shell{grid-template-columns:1fr}
+  .aside{padding:32px 28px;min-height:auto}
+  .aside-mid{margin:24px 0}
+  .aside-h{font-size:24px}
+  .form{padding:32px 28px}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- Aside (left): branding -->
+  <aside class="aside">
+    <div class="brand">
+      <div class="brand-mark"><img src="goldring-logo.png" alt="Goldring Designs"></div>
+      <div>
+        <div class="brand-t">Goldring Designs</div>
+        <div class="brand-s">Pipeline · CRM</div>
+      </div>
+    </div>
+
+    <div class="aside-mid">
+      <div class="aside-eyebrow">Welcome back</div>
+      <h1 class="aside-h">Your <em>lead-to-delivery</em> pipeline.</h1>
+      <p class="aside-d">Architects and builders sourced overnight. Outreach sent automatically. You only spend time on the parts that need your attention.</p>
+    </div>
+
+    <div class="aside-foot">
+      <b>Powered by Quantistic Systems</b>
+    </div>
+  </aside>
+
+  <!-- Form (right): login -->
+  <main class="form">
+    <h2 class="form-h">Sign in to your CRM</h2>
+    <p class="form-d">Enter the credentials Quantistic shared with you.</p>
+
+    <div class="alert err" id="err"></div>
+    <div class="alert ok"  id="ok"></div>
+
+    <form id="login-form" onsubmit="return doLogin(event)">
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="doug@goldringdesigns.co.uk" required>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
+      </div>
+      <button class="btn" id="submit-btn" type="submit">
+        <span class="spinner"></span>
+        <span class="lbl">Sign in</span>
+      </button>
+    </form>
+
+    <div class="foot-line">
+      Trouble signing in? <a href="mailto:tomas@quantisticsystems.com">Email Tomas</a>
+    </div>
+  </main>
+
+</div>
+
+<script>
+const API_BASE = 'https://quantistic-crm-backend.onrender.com';
+
+// If already authenticated, skip login
+if (localStorage.getItem('goldring_token') && localStorage.getItem('goldring_agency') === 'goldring') {
+  // Soft-validate via a quick health hit — if backend rejects, clear and stay on login
+  fetch(API_BASE + '/api/leads?agency_id=goldring', {
+    headers: { 'x-api-key': localStorage.getItem('goldring_token') }
+  }).then(r => {
+    if (r.ok) window.location.href = 'crm.html';
+    else { localStorage.removeItem('goldring_token'); localStorage.removeItem('goldring_agency'); }
+  }).catch(()=>{});
+}
+
+function showAlert(kind, msg) {
+  const err = document.getElementById('err'); const ok = document.getElementById('ok');
+  err.classList.remove('show'); ok.classList.remove('show');
+  const el = kind === 'err' ? err : ok;
+  el.textContent = msg; el.classList.add('show');
+}
+
+async function doLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  const lbl = btn.querySelector('.lbl');
+  btn.classList.add('loading'); btn.disabled = true; lbl.textContent = 'Signing in…';
+  showAlert(null, '');
+
+  const email = document.getElementById('email').value.trim().toLowerCase();
+  const password = document.getElementById('password').value;
+
+  try {
+    const res = await fetch(API_BASE + '/api/auth/goldring', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok || !data.token) {
+      throw new Error(data.error || data.message || `Sign-in failed (HTTP ${res.status})`);
+    }
+
+    localStorage.setItem('goldring_token',  data.token);
+    localStorage.setItem('goldring_agency', data.agency_id || 'goldring');
+    localStorage.setItem('goldring_user',   data.user_name || email.split('@')[0]);
+    showAlert('ok', 'Signed in. Loading your pipeline…');
+    setTimeout(() => window.location.href = 'crm.html', 600);
+  } catch (err) {
+    console.error(err);
+    showAlert('err', err.message || 'Sign-in failed. Check your email and password.');
+    btn.classList.remove('loading'); btn.disabled = false; lbl.textContent = 'Sign in';
+  }
+}
+</script>
+</body>
+</html>

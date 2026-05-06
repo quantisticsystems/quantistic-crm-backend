@@ -1,5 +1,6 @@
 const express = require('express');
 const crypto  = require('crypto');
+const path    = require('path');
 const { createClient } = require('@supabase/supabase-js');
 const app = express();
 
@@ -35,6 +36,47 @@ app.get('/health', async (req, res) => {
 app.get('/', (req, res) => {
   res.json({ status: 'ok', message: 'Quantistic CRM Backend — Supabase powered' });
 });
+
+// ── Tenant login ──
+// Validates email + password against per-tenant env vars and returns the API token.
+// For now the token IS the existing API key — kept simple for v1.
+// Add new tenants by adding {TENANT}_EMAIL + {TENANT}_PASSWORD env vars.
+app.post('/api/auth/:tenant', async (req, res) => {
+  const tenant = (req.params.tenant || '').toLowerCase().replace(/[^a-z0-9_]/g, '');
+  if (!tenant) return res.status(400).json({ error: 'tenant required' });
+
+  const { email, password } = req.body || {};
+  if (!email || !password) return res.status(400).json({ error: 'email and password required' });
+
+  const expectedEmail    = (process.env[tenant.toUpperCase() + '_EMAIL'] || '').toLowerCase().trim();
+  const expectedPassword =  process.env[tenant.toUpperCase() + '_PASSWORD'] || '';
+  const userName         =  process.env[tenant.toUpperCase() + '_USER_NAME'] || '';
+
+  if (!expectedEmail || !expectedPassword) {
+    return res.status(503).json({ error: 'Tenant credentials not configured. Set ' + tenant.toUpperCase() + '_EMAIL and ' + tenant.toUpperCase() + '_PASSWORD on the server.' });
+  }
+
+  const okEmail = email.toLowerCase().trim() === expectedEmail;
+  // Constant-time compare to avoid timing attacks
+  const a = Buffer.from(password); const b = Buffer.from(expectedPassword);
+  const okPass = a.length === b.length && crypto.timingSafeEqual(a, b);
+
+  if (!okEmail || !okPass) {
+    return res.status(401).json({ error: 'Invalid email or password' });
+  }
+
+  res.json({
+    token: process.env.DASHBOARD_API_KEY || 'quantistic2025',
+    agency_id: tenant,
+    user_name: userName || email.split('@')[0],
+    issued_at: new Date().toISOString()
+  });
+});
+
+// ── Static client portals — /goldring/login.html, /goldring/crm.html etc ──
+app.use('/goldring', express.static(path.join(__dirname, 'public', 'goldring')));
+// Bare /goldring → login page
+app.get('/goldring', (req, res) => res.redirect('/goldring/login.html'));
 
 // ── Generic app state (key-value JSON store for client-side dashboards) ──
 app.get('/api/state/:key', auth, async (req, res) => {

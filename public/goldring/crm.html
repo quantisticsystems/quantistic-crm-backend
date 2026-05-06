@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goldring Designs — Pipeline</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f5f1;--paper:#fff;--paper2:#fafaf7;
+  --ink:#0d0d0d;--ink2:#3b3b3b;--ink3:#7a7a7a;--ink4:#a8a8a8;
+  --rule:#e6e3dd;--rule2:#d0ccc4;
+  --accent:#5e4a1a;--accent-soft:#f5f0e3;
+  --grn:#2d6e2d;--grn-soft:#e8f1e8;
+  --amb:#996600;--amb-soft:#fcf3df;
+  --red:#a83232;--red-soft:#f5e3e3;
+  --blu:#2c4d8c;--blu-soft:#e3eaf5;
+  --pur:#5d3a9b;--pur-soft:#ece4f5;
+}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--ink);font-size:13.5px;line-height:1.55;letter-spacing:-.005em;min-height:100vh}
+a{color:inherit;text-decoration:none}
+
+/* ─── Layout ─── */
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+.sb{background:#0d0d0d;color:#e8e6e0;padding:26px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{padding:0 4px;margin-bottom:30px}
+.brand-logo{background:#fff;border-radius:6px;padding:14px 16px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.brand-logo img{max-width:100%;height:auto;max-height:46px;display:block}
+.brand-sub{font-family:'Inter',sans-serif;font-size:9.5px;color:#9a978f;letter-spacing:.14em;font-weight:600;text-transform:uppercase;text-align:center;letter-spacing:.18em}
+.nav{flex:1}
+.nav-h{font-size:9.5px;text-transform:uppercase;letter-spacing:.14em;color:#7a7770;font-weight:600;padding:0 10px;margin:18px 0 8px}
+.nav-h:first-child{margin-top:0}
+.nav-i{display:flex;align-items:center;gap:11px;padding:8px 10px;border-radius:5px;cursor:pointer;color:#bdb9b0;font-size:13px;margin-bottom:1px;transition:all .12s;font-weight:500}
+.nav-i:hover{color:#fff;background:rgba(255,255,255,.04)}
+.nav-i.act{color:#fff;background:rgba(255,255,255,.08)}
+.nav-i .ic{width:16px;height:16px;flex-shrink:0;opacity:.85}
+.nav-i .badge{margin-left:auto;background:rgba(255,255,255,.1);color:#fff;font-size:10px;padding:1px 6px;border-radius:99px;font-weight:600}
+.nav-i.act .badge{background:#fff;color:#0d0d0d}
+.sb-foot{padding-top:18px;border-top:1px solid rgba(255,255,255,.1);margin-top:18px}
+.sb-user{display:flex;gap:10px;align-items:center;padding:0 4px}
+.sb-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#d4a843,#8b6f1e);display:flex;align-items:center;justify-content:center;color:#0d0d0d;font-weight:600;font-size:12px;flex-shrink:0}
+.sb-user-n{font-size:12.5px;font-weight:500;color:#fff}
+.sb-user-r{font-size:10.5px;color:#9a978f}
+
+.main{display:flex;flex-direction:column;background:var(--bg);min-width:0}
+
+/* ─── Topbar ─── */
+.top{display:flex;justify-content:space-between;align-items:center;padding:18px 32px;background:var(--paper);border-bottom:1px solid var(--rule);position:sticky;top:0;z-index:5}
+.top-l h1{font-family:'Source Serif 4',serif;font-size:22px;font-weight:500;letter-spacing:-.01em;line-height:1.2}
+.top-l p{font-size:11.5px;color:var(--ink3);margin-top:1px;letter-spacing:.02em}
+.top-actions{display:flex;gap:8px}
+.btn{padding:7px 14px;border-radius:5px;font-size:12.5px;border:1px solid var(--rule2);background:var(--paper);color:var(--ink);font-family:inherit;cursor:pointer;font-weight:500;transition:all .12s}
+.btn:hover{background:var(--paper2)}
+.btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.primary:hover{background:#222}
+
+/* ─── Body ─── */
+.body{padding:24px 32px 40px;flex:1;overflow-x:hidden}
+.section-h{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px;gap:14px}
+.section-t{font-family:'Source Serif 4',serif;font-size:18px;font-weight:500;letter-spacing:-.01em}
+.section-d{font-size:11.5px;color:var(--ink3);margin-top:2px}
+.section-link{font-size:11.5px;color:var(--ink2);font-weight:500;border-bottom:1px solid var(--rule2);cursor:pointer}
+.section-link:hover{border-bottom-color:var(--ink)}
+
+/* ─── Hot leads card (the headline feature) ─── */
+.hot-card{background:linear-gradient(135deg,#0d0d0d 0%,#1a1612 100%);color:#f0eee8;border-radius:8px;padding:24px 28px;margin-bottom:24px;position:relative;overflow:hidden}
+.hot-card:after{content:"";position:absolute;top:-30%;right:-10%;width:380px;height:380px;background:radial-gradient(circle,rgba(212,168,67,.18) 0%,transparent 70%)}
+.hot-h{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;position:relative;z-index:1}
+.hot-h-l{}
+.hot-eyebrow{font-size:9.5px;text-transform:uppercase;letter-spacing:.16em;color:#d4a843;margin-bottom:6px;font-weight:600}
+.hot-h h2{font-family:'Source Serif 4',serif;font-size:24px;font-weight:500;letter-spacing:-.015em;color:#fff;line-height:1.2}
+.hot-h-d{font-size:12px;color:#a09c93;margin-top:3px}
+.hot-h-r{font-size:10.5px;color:#a09c93;text-align:right;line-height:1.5}
+.hot-h-r b{color:#fff;font-weight:500;display:block;font-size:13px}
+.hot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;position:relative;z-index:1}
+.hot-item{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:14px 16px;transition:all .15s;cursor:pointer}
+.hot-item:hover{background:rgba(255,255,255,.08);border-color:rgba(212,168,67,.4)}
+.hot-rank{font-family:'Source Serif 4',serif;font-size:11px;color:#d4a843;letter-spacing:.06em;font-weight:600;margin-bottom:6px}
+.hot-name{font-weight:600;font-size:14px;color:#fff;margin-bottom:3px;letter-spacing:-.01em}
+.hot-meta{font-size:11px;color:#a09c93;margin-bottom:10px}
+.hot-reason{font-size:11.5px;color:#d4d2cb;line-height:1.5;border-top:1px solid rgba(255,255,255,.08);padding-top:9px}
+.hot-action{margin-top:9px;font-size:10.5px;color:#d4a843;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+
+/* ─── Stats row ─── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.stat{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:16px 18px}
+.stat-l{font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);font-weight:600;margin-bottom:6px}
+.stat-v{font-family:'Source Serif 4',serif;font-size:26px;font-weight:500;letter-spacing:-.02em;line-height:1}
+.stat-d{font-size:11px;color:var(--ink3);margin-top:5px}
+.stat-d.up{color:var(--grn)}
+.stat-d.down{color:var(--red)}
+
+/* ─── Pipeline table ─── */
+.tbl-wrap{background:var(--paper);border:1px solid var(--rule);border-radius:6px;margin-bottom:24px;overflow:hidden}
+.tbl-controls{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--rule);gap:12px;flex-wrap:wrap}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.fp{padding:5px 11px;border-radius:99px;font-size:11.5px;cursor:pointer;border:1px solid var(--rule);background:transparent;color:var(--ink2);font-family:inherit;font-weight:500;transition:all .12s}
+.fp:hover{border-color:var(--rule2);color:var(--ink)}
+.fp.act{background:var(--ink);color:#fff;border-color:var(--ink)}
+.search{padding:6px 12px;border:1px solid var(--rule2);border-radius:5px;font-size:12px;font-family:inherit;outline:none;width:220px}
+.search:focus{border-color:var(--ink)}
+.thr,.row{display:grid;grid-template-columns:30px 2.2fr 1.4fr 1.1fr 1.1fr 1.3fr 90px;gap:12px;padding:11px 20px;align-items:center;border-bottom:1px solid var(--rule);font-size:12.5px}
+.thr{background:var(--paper2);font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);font-weight:600}
+.row{cursor:pointer;transition:background .1s}
+.row:hover{background:#fafaf7}
+.row:last-child{border-bottom:none}
+.row.expanded{background:var(--paper2);border-bottom:none}
+.lead-rank{font-family:'Source Serif 4',serif;color:var(--ink3);font-size:11px;font-weight:600;letter-spacing:.04em}
+.lead-rank.hot{color:var(--accent)}
+.lead-name{font-weight:600;font-size:13px;letter-spacing:-.005em}
+.lead-firm{font-size:11px;color:var(--ink3);margin-top:1px}
+.lead-loc{font-size:12px;color:var(--ink2)}
+.lead-loc small{color:var(--ink3);font-size:11px;display:block}
+.stage-pill{font-size:10.5px;padding:3px 10px;border-radius:99px;font-weight:600;display:inline-block;letter-spacing:.02em}
+.s-cold{background:#f0ede8;color:var(--ink3)}
+.s-outreached{background:var(--blu-soft);color:var(--blu)}
+.s-engaged{background:var(--pur-soft);color:var(--pur)}
+.s-quoted{background:var(--amb-soft);color:var(--amb)}
+.s-won{background:var(--grn-soft);color:var(--grn)}
+.s-dead{background:#f0ede8;color:var(--ink4);text-decoration:line-through;text-decoration-thickness:1px}
+.lead-value{font-family:'Source Serif 4',serif;font-size:14px;font-weight:500;letter-spacing:-.01em}
+.lead-last{font-size:11.5px;color:var(--ink2)}
+.lead-last small{display:block;color:var(--ink3);font-size:10.5px;margin-top:1px}
+.row-actions{display:flex;gap:4px;justify-content:flex-end}
+.icon-btn{width:26px;height:26px;border-radius:5px;border:1px solid var(--rule);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink3);transition:all .12s}
+.icon-btn:hover{background:var(--paper2);color:var(--ink);border-color:var(--rule2)}
+
+/* Drawer (inline lead detail) */
+.drawer{background:var(--paper2);border-bottom:1px solid var(--rule);padding:22px 28px;display:none;animation:dr-in .18s ease}
+.drawer.open{display:grid;grid-template-columns:1.4fr 1fr;gap:32px}
+@keyframes dr-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.dr-block{}
+.dr-h{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:18px}
+.dr-name{font-family:'Source Serif 4',serif;font-size:21px;font-weight:500;letter-spacing:-.01em;line-height:1.2;margin-bottom:3px}
+.dr-firm{font-size:12px;color:var(--ink3);margin-bottom:1px}
+.dr-loc{font-size:11px;color:var(--ink4);letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.dr-key{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--rule)}
+.dr-k-l{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);font-weight:600;margin-bottom:3px}
+.dr-k-v{font-size:12.5px;color:var(--ink);font-weight:500}
+.dr-k-v a{color:var(--accent);border-bottom:1px solid var(--rule2)}
+.dr-section-h{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);font-weight:600;margin-bottom:10px}
+.dr-tl-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule);font-size:12px}
+.dr-tl-item:last-child{border-bottom:none}
+.dr-tl-d{font-size:10.5px;color:var(--ink3);min-width:62px;letter-spacing:.04em;font-weight:600;padding-top:1px}
+.dr-tl-c{flex:1;line-height:1.5;color:var(--ink2)}
+.dr-tl-c b{color:var(--ink);font-weight:600}
+.dr-aside{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:18px 20px}
+.dr-aside-h{font-family:'Source Serif 4',serif;font-size:15px;font-weight:500;letter-spacing:-.005em;margin-bottom:10px}
+.dr-aside-d{font-size:11.5px;color:var(--ink3);margin-bottom:14px;line-height:1.55}
+.dr-email-preview{background:var(--paper2);border:1px solid var(--rule);border-radius:5px;padding:13px 15px;margin-bottom:10px;font-size:12px;line-height:1.6;color:var(--ink2)}
+.dr-email-preview b{color:var(--ink);font-weight:600}
+.dr-email-preview .from{font-size:10.5px;color:var(--ink3);margin-bottom:6px;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+
+/* ─── Outreach panel ─── */
+.outreach-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;margin-bottom:24px}
+.outreach-card{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:22px 24px}
+.outreach-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+.outreach-h-t{font-family:'Source Serif 4',serif;font-size:16px;font-weight:500;letter-spacing:-.005em}
+.outreach-status{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--grn);font-weight:500}
+.outreach-status:before{content:"";width:7px;height:7px;background:var(--grn);border-radius:50%}
+.outreach-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.outreach-stat{padding:0}
+.outreach-stat-l{font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);font-weight:600;margin-bottom:4px}
+.outreach-stat-v{font-family:'Source Serif 4',serif;font-size:18px;font-weight:500;letter-spacing:-.01em}
+.email-tmpl{background:var(--paper2);border:1px solid var(--rule);border-radius:5px;padding:14px 16px;margin-bottom:8px}
+.email-tmpl-h{display:flex;justify-content:space-between;font-size:11px;color:var(--ink3);margin-bottom:8px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.email-tmpl-subject{font-weight:600;font-size:13px;margin-bottom:5px;letter-spacing:-.005em}
+.email-tmpl-body{font-size:12px;color:var(--ink2);line-height:1.55}
+.email-tmpl-body em{color:var(--accent);font-style:normal;background:rgba(94,74,26,.08);padding:0 3px;border-radius:2px}
+
+/* ─── Footer ─── */
+.foot{padding:20px 32px;border-top:1px solid var(--rule);font-size:10.5px;color:var(--ink3);display:flex;justify-content:space-between}
+
+/* ─── Panels ─── */
+.panel{animation:p-in .18s ease}
+@keyframes p-in{from{opacity:0;transform:translateY(2px)}to{opacity:1;transform:none}}
+.placeholder{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:60px 32px;text-align:center;color:var(--ink3)}
+.placeholder h2{font-family:'Source Serif 4',serif;font-size:22px;color:var(--ink);margin-bottom:8px;font-weight:500;letter-spacing:-.01em}
+.placeholder p{font-size:13px;max-width:480px;margin:0 auto;line-height:1.6}
+
+/* ─── Scraper panel ─── */
+.scraper-status{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:18px 22px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.scraper-status-l{display:flex;gap:14px;align-items:center}
+.pulse-dot{width:10px;height:10px;background:var(--grn);border-radius:50%;flex-shrink:0;position:relative;animation:pulse 2s infinite}
+.pulse-dot:before{content:"";position:absolute;inset:-4px;border:2px solid var(--grn);border-radius:50%;opacity:.3;animation:pulse-ring 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+@keyframes pulse-ring{0%{transform:scale(.8);opacity:.6}100%{transform:scale(1.6);opacity:0}}
+.scraper-status-t{font-family:'Source Serif 4',serif;font-size:16px;font-weight:500;letter-spacing:-.005em}
+.scraper-status-d{font-size:11.5px;color:var(--ink3);margin-top:2px}
+.scraper-status-r{display:flex;gap:18px}
+.counter{text-align:center;padding:0 12px}
+.counter-v{font-family:'Source Serif 4',serif;font-size:22px;font-weight:500;letter-spacing:-.01em;line-height:1}
+.counter-l{font-size:9.5px;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;margin-top:4px;font-weight:600}
+
+.scraper-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
+.scraper-card{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:22px 24px}
+.scraper-card-h{font-family:'Source Serif 4',serif;font-size:16px;font-weight:500;letter-spacing:-.005em;margin-bottom:4px}
+.scraper-card-d{font-size:11.5px;color:var(--ink3);margin-bottom:14px;line-height:1.55}
+.source-list{display:flex;flex-direction:column;gap:8px}
+.source-item{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:12px 14px;background:var(--paper2);border-radius:5px}
+.source-status{width:8px;height:8px;border-radius:50%}
+.source-status.active{background:var(--grn);box-shadow:0 0 0 3px rgba(45,110,45,.12)}
+.source-status.idle{background:var(--ink4)}
+.source-name{font-size:13px;font-weight:500;letter-spacing:-.005em}
+.source-meta{font-size:11px;color:var(--ink3);margin-top:1px}
+.source-stat{font-size:11.5px;color:var(--ink2);font-weight:500;font-family:'Source Serif 4',serif}
+
+.criteria-list{display:flex;flex-direction:column;gap:0}
+.criteria-row{display:grid;grid-template-columns:120px 1fr;gap:14px;padding:9px 0;border-bottom:1px solid var(--rule);font-size:12.5px;align-items:flex-start}
+.criteria-row:last-child{border-bottom:none}
+.criteria-l{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);font-weight:600;padding-top:1px}
+.criteria-v{color:var(--ink2);line-height:1.45}
+
+.scraper-feed{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:22px 24px;margin-bottom:18px}
+.feed-list{display:flex;flex-direction:column;gap:0}
+.feed-item{display:grid;grid-template-columns:54px 24px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--rule);align-items:center;font-size:12.5px;animation:fade-in .3s ease}
+.feed-item:last-child{border-bottom:none}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+.feed-time{font-size:10.5px;color:var(--ink3);font-family:'Source Serif 4',serif;font-weight:600;letter-spacing:.04em}
+.feed-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}
+.feed-icon.ok{background:var(--grn-soft);color:var(--grn)}
+.feed-icon.scan{background:var(--blu-soft);color:var(--blu);animation:scan-spin 2s infinite linear}
+.feed-icon.skip{background:#f0ede8;color:var(--ink3)}
+@keyframes scan-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.feed-text{color:var(--ink2);line-height:1.45}
+.feed-text b{color:var(--ink);font-weight:600}
+
+.recent-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.recent-card{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:16px 18px;cursor:pointer;transition:all .12s}
+.recent-card:hover{border-color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.recent-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:4px}
+.recent-name{font-weight:600;font-size:13.5px;letter-spacing:-.005em}
+.match{font-family:'Source Serif 4',serif;font-size:14px;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:99px;letter-spacing:-.01em}
+.recent-firm{font-size:11.5px;color:var(--ink3);margin-bottom:8px}
+.recent-meta{font-size:11px;color:var(--ink2);line-height:1.5;padding-top:8px;border-top:1px solid var(--rule);margin-bottom:10px}
+.recent-tags{display:flex;gap:5px;flex-wrap:wrap}
+.tag{font-size:10px;padding:2px 8px;border-radius:99px;background:var(--paper2);color:var(--ink2);border:1px solid var(--rule);font-weight:500;letter-spacing:.02em}
+
+/* ─── Outreach Engine ─── */
+.outreach-status-bar{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:18px 22px;margin-bottom:24px;display:flex;align-items:center;gap:14px}
+.outreach-status-t{font-family:'Source Serif 4',serif;font-size:16px;font-weight:500;letter-spacing:-.005em}
+.outreach-status-d{font-size:11.5px;color:var(--ink3);margin-top:2px}
+
+.sequence-flow{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:18px}
+.seq-stage{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:18px 22px;width:100%;max-width:760px;position:relative}
+.seq-stage.final{border-color:var(--accent);background:#fcfaf5}
+.seq-stage-num{font-size:9.5px;text-transform:uppercase;letter-spacing:.16em;color:var(--ink3);font-weight:600;margin-bottom:4px}
+.seq-stage.final .seq-stage-num{color:var(--accent)}
+.seq-stage-t{font-family:'Source Serif 4',serif;font-size:17px;font-weight:500;letter-spacing:-.005em;margin-bottom:14px}
+.seq-arrow{font-size:11px;color:var(--ink3);font-weight:500;letter-spacing:.04em;padding:6px 0}
+.seq-email{background:var(--paper2);border:1px solid var(--rule);border-radius:5px;padding:14px 16px}
+.seq-email-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--rule);font-size:11px;color:var(--ink3)}
+.seq-email-h b{color:var(--ink);font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:9.5px}
+.seq-email-stat{font-size:10.5px;font-weight:500;letter-spacing:.02em}
+.seq-email-stat b{color:var(--grn);font-size:10.5px;letter-spacing:0;text-transform:none}
+.seq-email-subject{font-size:13.5px;font-weight:600;margin-bottom:8px;letter-spacing:-.005em;color:var(--ink)}
+.seq-email-body{font-size:12.5px;color:var(--ink2);line-height:1.65}
+.seq-email-body em{color:var(--accent);font-style:normal;background:rgba(94,74,26,.1);padding:1px 4px;border-radius:3px;font-size:.92em}
+
+.send-table{background:var(--paper);border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.send-thr,.send-row{display:grid;grid-template-columns:1.4fr 90px 2.2fr 160px 70px;gap:12px;padding:13px 18px;align-items:center;border-bottom:1px solid var(--rule)}
+.send-thr{background:var(--paper2);font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);font-weight:600}
+.send-row{font-size:12px}
+.send-row:last-child{border-bottom:none}
+.send-rec b{display:block;font-weight:600;font-size:13px;letter-spacing:-.005em}
+.send-rec small{display:block;font-size:11px;color:var(--ink3);margin-top:1px}
+.send-subj{color:var(--ink2);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.send-status{font-size:11px;font-weight:500;padding:3px 9px;border-radius:99px;display:inline-block;letter-spacing:.02em}
+.send-status.sent{background:var(--grn-soft);color:var(--grn)}
+.send-status.pending{background:var(--paper2);color:var(--ink3);border:1px solid var(--rule)}
+.send-time{font-size:11.5px;color:var(--ink3);font-family:'Source Serif 4',serif;font-weight:600}
+
+.seq-pill{font-size:10px;padding:3px 8px;border-radius:99px;font-weight:600;display:inline-block;letter-spacing:.04em}
+.seq-day0{background:var(--blu-soft);color:var(--blu)}
+.seq-day3{background:var(--pur-soft);color:var(--pur)}
+.seq-day7{background:var(--amb-soft);color:var(--amb)}
+.seq-day14{background:#f0ede8;color:var(--ink3)}
+
+/* ─── Inbox ─── */
+.inbox-app{display:grid;grid-template-columns:340px 1fr;background:var(--paper);border:1px solid var(--rule);border-radius:6px;overflow:hidden;height:calc(100vh - 220px);min-height:540px}
+.inbox-list{border-right:1px solid var(--rule);overflow-y:auto}
+.inbox-list-h{padding:14px 18px;border-bottom:1px solid var(--rule);font-family:'Source Serif 4',serif;font-size:14px;font-weight:500;letter-spacing:-.005em;background:var(--paper2)}
+.inbox-thread{padding:14px 18px;cursor:pointer;transition:background .1s}
+.inbox-thread:hover{background:var(--paper2)}
+.inbox-thread.act{background:#fcfaf5;border-left:3px solid var(--accent);padding-left:15px}
+.thread-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
+.thread-name{font-weight:600;font-size:13px;letter-spacing:-.005em}
+.thread-time{font-size:10.5px;color:var(--ink3);font-family:'Source Serif 4',serif;font-weight:600;letter-spacing:.04em}
+.thread-firm{font-size:11px;color:var(--ink3);margin-bottom:6px}
+.thread-snippet{font-size:11.5px;color:var(--ink2);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px}
+.thread-tag{font-size:10px;padding:2px 8px;border-radius:99px;font-weight:600;display:inline-block;background:var(--paper2);color:var(--ink3);border:1px solid var(--rule);letter-spacing:.04em;text-transform:uppercase}
+.thread-tag.urgent{background:var(--amb-soft);color:var(--amb);border-color:transparent}
+.thread-tag.won{background:var(--grn-soft);color:var(--grn);border-color:transparent}
+.thread-tag.chase{background:var(--red-soft);color:var(--red);border-color:transparent}
+.thread-divider{height:1px;background:var(--rule);margin:0 18px}
+
+.inbox-thread-detail{padding:24px 28px;overflow-y:auto}
+.thread-d-h{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--rule)}
+.thread-d-name{font-family:'Source Serif 4',serif;font-size:22px;font-weight:500;letter-spacing:-.01em;line-height:1.2;margin-bottom:3px}
+.thread-d-meta{font-size:11.5px;color:var(--ink3)}
+.thread-d-actions{display:flex;gap:6px}
+
+.thread-msg{background:var(--paper2);border:1px solid var(--rule);border-radius:6px;padding:16px 20px;margin-bottom:12px}
+.thread-msg.incoming{background:#fcfaf5;border-color:rgba(94,74,26,.2);border-left:3px solid var(--accent)}
+.msg-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:11px;color:var(--ink3);gap:10px;flex-wrap:wrap}
+.msg-from{font-weight:500;color:var(--ink2)}
+.msg-from b{color:var(--ink);font-weight:600}
+.msg-time{font-family:'Source Serif 4',serif;font-weight:600;letter-spacing:.04em}
+.msg-tag{font-size:10px;padding:2px 8px;border-radius:99px;font-weight:600;letter-spacing:.04em;background:var(--pur-soft);color:var(--pur);text-transform:uppercase}
+.msg-tag.day3{background:var(--pur-soft);color:var(--pur)}
+.msg-subject{font-size:13.5px;font-weight:600;margin-bottom:8px;letter-spacing:-.005em;color:var(--ink)}
+.msg-body{font-size:12.5px;color:var(--ink2);line-height:1.65}
+.msg-meta{font-size:10.5px;color:var(--grn);margin-top:8px;padding-top:8px;border-top:1px solid var(--rule);font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+
+.thread-draft{background:#fff;border:2px dashed var(--accent);border-radius:6px;padding:16px 20px;margin-top:18px}
+.draft-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.draft-eyebrow{font-size:9.5px;text-transform:uppercase;letter-spacing:.16em;color:var(--accent);font-weight:600}
+.draft-time{font-size:10.5px;color:var(--ink3);font-family:'Source Serif 4',serif;font-weight:600;letter-spacing:.04em}
+.draft-actions{display:flex;gap:6px;margin-top:14px;padding-top:14px;border-top:1px solid var(--rule)}
+
+/* ─── Project Intake ─── */
+.intake-status-bar{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:18px 22px;margin-bottom:18px;display:flex;align-items:center;gap:14px}
+.intake-app{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:flex-start}
+.intake-list{background:var(--paper);border:1px solid var(--rule);border-radius:6px;overflow:hidden;position:sticky;top:90px}
+.intake-list-h{padding:14px 18px;border-bottom:1px solid var(--rule);font-family:'Source Serif 4',serif;font-size:14px;font-weight:500;letter-spacing:-.005em;background:var(--paper2)}
+.intake-item{padding:14px 18px;cursor:pointer;transition:background .1s}
+.intake-item:hover{background:var(--paper2)}
+.intake-item.act{background:#fcfaf5;border-left:3px solid var(--accent);padding-left:15px}
+.intake-divider{height:1px;background:var(--rule);margin:0 18px}
+.intake-item-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.intake-item-name{font-weight:600;font-size:13px;letter-spacing:-.005em}
+.intake-item-firm{font-size:11px;color:var(--ink3);margin-top:1px}
+.intake-progress-mini{text-align:right}
+.intake-progress-bar{height:5px;background:var(--rule);border-radius:99px;overflow:hidden;width:80px;margin-bottom:3px}
+.intake-progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .3s}
+.intake-progress-l{font-size:10.5px;color:var(--ink3);font-weight:600;font-family:'Source Serif 4',serif;letter-spacing:.04em}
+.intake-item-meta{font-size:11px;color:var(--ink3);line-height:1.45}
+.intake-item-meta b{font-weight:600}
+
+.intake-detail{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:24px 28px}
+.intake-detail-h{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--rule)}
+.intake-detail-name{font-family:'Source Serif 4',serif;font-size:22px;font-weight:500;letter-spacing:-.01em;line-height:1.2;margin-bottom:3px}
+.intake-detail-sub{font-size:12px;color:var(--ink3);line-height:1.5}
+.intake-detail-sub b{color:var(--ink);font-weight:600}
+.intake-detail-actions{display:flex;gap:6px}
+
+.intake-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:var(--paper2);border:1px solid var(--rule);border-radius:5px;margin-bottom:18px;overflow:hidden}
+.intake-summary-i{padding:14px 16px;border-right:1px solid var(--rule)}
+.intake-summary-i:last-child{border-right:none}
+.intake-summary-l{font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);font-weight:600;margin-bottom:4px}
+.intake-summary-v{font-family:'Source Serif 4',serif;font-size:16px;font-weight:500;letter-spacing:-.005em}
+
+.intake-email{background:var(--paper2);border:1px solid var(--rule);border-radius:6px;padding:18px 22px;margin-bottom:18px}
+.intake-email-h{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--rule);gap:10px}
+.intake-email-eyebrow{font-size:9.5px;text-transform:uppercase;letter-spacing:.16em;color:var(--accent);font-weight:600}
+.intake-email-time{font-size:10.5px;color:var(--ink3);font-family:'Source Serif 4',serif;font-weight:600;letter-spacing:.04em}
+.intake-email-meta{font-size:11px;color:var(--ink3);margin-bottom:4px}
+.intake-email-meta b{color:var(--ink2);font-weight:600}
+.intake-email-body{font-size:12.5px;color:var(--ink2);line-height:1.7;margin-top:10px}
+.intake-email-body b{color:var(--ink);font-weight:600}
+.intake-link{color:var(--accent);background:rgba(94,74,26,.08);padding:3px 8px;border-radius:3px;font-size:12px;font-weight:500;display:inline-block;margin:6px 0;border:1px dashed rgba(94,74,26,.3)}
+
+.intake-progress-bar-large{display:flex;align-items:center;gap:14px}
+
+.intake-checklist{background:var(--paper2);border:1px solid var(--rule);border-radius:6px;padding:18px 22px;margin-bottom:18px}
+.check-section{font-size:9.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--ink3);font-weight:600;padding:6px 0 10px;border-bottom:1px solid var(--rule);margin-bottom:6px}
+.check-row{display:grid;grid-template-columns:32px 1fr auto;gap:12px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:center}
+.check-row:last-child{border-bottom:none}
+.check-icon{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}
+.check-icon.ok{background:var(--grn-soft);color:var(--grn)}
+.check-icon.pend{background:var(--amb-soft);color:var(--amb)}
+.check-title{font-weight:600;font-size:13px;letter-spacing:-.005em;margin-bottom:2px}
+.check-row.received .check-title{color:var(--ink)}
+.check-row.pending .check-title{color:var(--ink2)}
+.check-meta{font-size:11.5px;color:var(--ink3);line-height:1.45}
+.check-meta b{font-weight:600}
+
+.intake-chase-card{background:#fcfaf5;border:2px dashed var(--accent);border-radius:6px;padding:18px 22px}
+.intake-chase-h{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid rgba(94,74,26,.15);gap:14px}
+.intake-chase-eyebrow{font-size:9.5px;text-transform:uppercase;letter-spacing:.16em;color:var(--accent);font-weight:600}
+.intake-chase-t{font-family:'Source Serif 4',serif;font-size:14px;font-weight:500;letter-spacing:-.005em;margin-top:3px}
+
+@media (max-width:1100px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .hot-grid{grid-template-columns:1fr}
+  .outreach-grid{grid-template-columns:1fr}
+  .drawer.open{grid-template-columns:1fr}
+  .scraper-grid{grid-template-columns:1fr}
+  .recent-grid{grid-template-columns:repeat(2,1fr)}
+  .inbox-app{grid-template-columns:1fr;height:auto}
+  .inbox-list{max-height:300px}
+  .send-thr,.send-row{grid-template-columns:1.4fr 80px 1.5fr 110px 60px;font-size:11px}
+  .intake-app{grid-template-columns:1fr}
+  .intake-list{position:static}
+  .intake-summary{grid-template-columns:repeat(2,1fr)}
+  .intake-summary-i:nth-child(2){border-right:none}
+}
+@media (max-width:780px){
+  .app{grid-template-columns:1fr}
+  .sb{position:static;height:auto}
+  .thr{display:none}
+  .row{grid-template-columns:1fr;padding:14px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<aside class="sb">
+  <div class="brand">
+    <div class="brand-logo"><img src="goldring-logo.png" alt="Goldring Designs"></div>
+    <div class="brand-sub">Pipeline · CRM</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-h">Workspace</div>
+    <a class="nav-i act" data-panel="dashboard" onclick="showPanel('dashboard',this)"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>Dashboard</a>
+    <a class="nav-i" data-panel="scraper" onclick="showPanel('scraper',this)"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4"/><path d="M10 10l3 3"/></svg>Lead Scraper<span class="badge">Live</span></a>
+    <a class="nav-i" data-panel="outreach" onclick="showPanel('outreach',this)"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l6 5 6-5M2 4v8h12V4"/></svg>Outreach Engine</a>
+    <a class="nav-i" data-panel="inbox" onclick="showPanel('inbox',this)"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 5a1 1 0 011-1h10a1 1 0 011 1v6a1 1 0 01-1 1H3a1 1 0 01-1-1V5z"/><path d="M3 6l5 4 5-4"/></svg>Communications<span class="badge">3</span></a>
+    <a class="nav-i" data-panel="intake" onclick="showPanel('intake',this)"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v3h3M5 8h6M5 11h6"/></svg>Project Intake<span class="badge">3</span></a>
+
+    <div class="nav-h">Insights</div>
+    <a class="nav-i" data-panel="analytics" onclick="showPanel('analytics',this)"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 13h12M3 11l2.5-3.5L8 10l3-5 2 3"/></svg>Analytics</a>
+
+    <div class="nav-h">Account</div>
+    <a class="nav-i" data-panel="settings" onclick="showPanel('settings',this)"><svg class="ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2"/><path d="M8 1.5v1.5M8 13v1.5M1.5 8h1.5M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1"/></svg>Settings</a>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-user">
+      <div class="sb-av" id="sb-av">DG</div>
+      <div style="flex:1">
+        <div class="sb-user-n" id="sb-user-n">Doug</div>
+        <div class="sb-user-r">Founder · Goldring</div>
+      </div>
+      <button onclick="logout()" title="Sign out" style="background:none;border:1px solid rgba(255,255,255,.15);color:#bdb9b0;border-radius:5px;padding:5px 8px;cursor:pointer;font-size:10.5px;font-family:inherit;font-weight:500;letter-spacing:.04em">Sign out</button>
+    </div>
+  </div>
+  <script>
+    // Personalise sidebar from session
+    (function(){
+      const u = localStorage.getItem('goldring_user');
+      if (!u) return;
+      const name = u.charAt(0).toUpperCase() + u.slice(1).split('@')[0];
+      const av = name.split(/[ ._-]+/).map(s => s[0]).join('').slice(0,2).toUpperCase();
+      const elN = document.getElementById('sb-user-n'); if (elN) elN.textContent = name;
+      const elA = document.getElementById('sb-av'); if (elA) elA.textContent = av;
+    })();
+  </script>
+</aside>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<main class="main">
+
+  <!-- Topbar -->
+  <div class="top">
+    <div class="top-l">
+      <h1>Good morning, Doug</h1>
+      <p>Friday, 1 May 2026 · 3 priority actions for today</p>
+    </div>
+    <div class="top-actions">
+      <div id="conn" style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink3);padding:5px 10px;border:1px solid var(--rule);border-radius:5px;background:var(--paper2)"><span id="conn-dot" style="width:7px;height:7px;border-radius:50%;background:var(--ink4)"></span><span id="conn-text">Connecting…</span></div>
+      <button class="btn" onclick="reloadLive(true)">↻ Refresh</button>
+      <button class="btn primary" onclick="openAddModal()">+ Add lead</button>
+    </div>
+  </div>
+
+  <div class="body">
+
+  <!-- ═══════════ DASHBOARD PANEL ═══════════ -->
+  <div class="panel" id="panel-dashboard">
+
+    <!-- ═══════════ HOT LEADS — THE HEADLINE FEATURE ═══════════ -->
+    <div class="hot-card">
+      <div class="hot-h">
+        <div class="hot-h-l">
+          <div class="hot-eyebrow">Hot leads · Today's digest</div>
+          <h2 id="hot-title">Loading priority leads…</h2>
+          <div class="hot-h-d" id="hot-sub">Ranked by ICP × engagement × recency.</div>
+        </div>
+        <div class="hot-h-r">
+          <b id="hot-fresh">—</b>
+          <span id="hot-source">in pipeline</span>
+        </div>
+      </div>
+      <div class="hot-grid" id="hot-grid"></div>
+    </div>
+
+    <!-- ═══════════ STATS ═══════════ -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-l">Active in pipeline</div>
+        <div class="stat-v" id="s-active">—</div>
+        <div class="stat-d" id="s-active-d">All segments</div>
+      </div>
+      <div class="stat">
+        <div class="stat-l">Quoted (open)</div>
+        <div class="stat-v" id="s-quoted">—</div>
+        <div class="stat-d" id="s-quoted-d">Awaiting decision</div>
+      </div>
+      <div class="stat">
+        <div class="stat-l">Engaged</div>
+        <div class="stat-v" id="s-engaged">—</div>
+        <div class="stat-d">Replied to outreach</div>
+      </div>
+      <div class="stat">
+        <div class="stat-l">Won this month</div>
+        <div class="stat-v" id="s-won">—</div>
+        <div class="stat-d" id="s-won-d">Signed</div>
+      </div>
+    </div>
+
+    <!-- ═══════════ PIPELINE TABLE ═══════════ -->
+    <div class="section-h">
+      <div>
+        <div class="section-t">Pipeline</div>
+        <div class="section-d">All leads currently in motion · sorted by stage urgency</div>
+      </div>
+      <div class="section-link">View all 156 →</div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-controls">
+        <div class="filters" id="live-filters">
+          <button class="fp act" data-stage="all">All <span style="opacity:.6" data-cnt="all">0</span></button>
+          <button class="fp" data-stage="cold">Cold <span style="opacity:.6" data-cnt="cold">0</span></button>
+          <button class="fp" data-stage="outreached">Outreached <span style="opacity:.6" data-cnt="outreached">0</span></button>
+          <button class="fp" data-stage="engaged">Engaged <span style="opacity:.6" data-cnt="engaged">0</span></button>
+          <button class="fp" data-stage="quoted">Quoted <span style="opacity:.6" data-cnt="quoted">0</span></button>
+          <button class="fp" data-stage="won">Won <span style="opacity:.6" data-cnt="won">0</span></button>
+          <button class="fp" data-stage="dead">Dead <span style="opacity:.6" data-cnt="dead">0</span></button>
+        </div>
+        <input class="search" type="text" id="live-search" placeholder="Search firm, contact, region…">
+      </div>
+
+      <div class="thr">
+        <div></div><div>Architect / Firm</div><div>Location</div><div>Stage</div><div>Est. value</div><div>Last activity</div><div></div>
+      </div>
+      <div id="rows-live"></div>
+
+      <!-- Rows -->
+    </div>
+
+    <!-- ═══════════ OUTREACH ENGINE ═══════════ -->
+    <div class="section-h">
+      <div>
+        <div class="section-t">Outreach engine</div>
+        <div class="section-d">Live status of your automated email sequences</div>
+      </div>
+    </div>
+
+    <div class="outreach-grid">
+
+      <div class="outreach-card">
+        <div class="outreach-h">
+          <div class="outreach-h-t">Today's sending plan</div>
+          <div class="outreach-status">Active</div>
+        </div>
+        <div class="outreach-stat-row">
+          <div class="outreach-stat"><div class="outreach-stat-l">Cold sends</div><div class="outreach-stat-v">28</div></div>
+          <div class="outreach-stat"><div class="outreach-stat-l">Day 3 chasers</div><div class="outreach-stat-v">12</div></div>
+          <div class="outreach-stat"><div class="outreach-stat-l">Day 7 chasers</div><div class="outreach-stat-v">9</div></div>
+          <div class="outreach-stat"><div class="outreach-stat-l">Day 14 chasers</div><div class="outreach-stat-v">4</div></div>
+        </div>
+        <div class="email-tmpl">
+          <div class="email-tmpl-h"><span>Day-3 chaser · queued</span><span>10:00am</span></div>
+          <div class="email-tmpl-subject">A quick follow-up on your stage 4 submissions</div>
+          <div class="email-tmpl-body">Hi <em>{{first_name}}</em>, just nudging this back up — happy to send a couple of stage-4 examples if it's helpful before you decide. Most of <em>{{firm_name}}</em>'s peers I work with see the value when their client sees the proposal in 3D rather than on a plan...</div>
+        </div>
+        <div class="email-tmpl">
+          <div class="email-tmpl-h"><span>Day-7 chaser · queued</span><span>10:00am</span></div>
+          <div class="email-tmpl-subject">Locking my May availability — would love to help</div>
+          <div class="email-tmpl-body">Hi <em>{{first_name}}</em>, locking up my May calendar this week. If <em>{{firm_name}}</em> has anything coming through where a fly-through would help close the brief with the client, I've got a couple of slots left...</div>
+        </div>
+      </div>
+
+      <div class="outreach-card">
+        <div class="outreach-h">
+          <div class="outreach-h-t">Last 30 days</div>
+          <div class="outreach-status">Performing</div>
+        </div>
+        <div class="outreach-stat-row" style="grid-template-columns:1fr 1fr">
+          <div class="outreach-stat"><div class="outreach-stat-l">Sent</div><div class="outreach-stat-v">412</div></div>
+          <div class="outreach-stat"><div class="outreach-stat-l">Open rate</div><div class="outreach-stat-v">38%</div></div>
+          <div class="outreach-stat"><div class="outreach-stat-l">Reply rate</div><div class="outreach-stat-v">12.4%</div></div>
+          <div class="outreach-stat"><div class="outreach-stat-l">Booked</div><div class="outreach-stat-v">9</div></div>
+        </div>
+        <div style="font-size:11.5px;color:var(--ink3);line-height:1.6;padding-top:12px;border-top:1px solid var(--rule)">
+          <b style="color:var(--ink);font-weight:600">Insight:</b> Your day-3 follow-up is converting <b style="color:var(--grn)">2.4× higher</b> than the cold open. Consider testing a shorter day-7 variant — the long version has a 14% open vs 41% for day-3.
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /panel-dashboard -->
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- LEAD SCRAPER PANEL                                                   -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <div class="panel" id="panel-scraper" style="display:none">
+
+    <div class="scraper-status">
+      <div class="scraper-status-l">
+        <div class="pulse-dot"></div>
+        <div>
+          <div class="scraper-status-t">Lead scraper · Active</div>
+          <div class="scraper-status-d">Scanning <b>3 sources</b> for new architects matching your criteria · Last sync 09:42</div>
+        </div>
+      </div>
+      <div class="scraper-status-r">
+        <div class="counter"><div class="counter-v" id="cnt-today">14</div><div class="counter-l">New today</div></div>
+        <div class="counter"><div class="counter-v">87</div><div class="counter-l">This week</div></div>
+        <div class="counter"><div class="counter-v">412</div><div class="counter-l">This month</div></div>
+      </div>
+    </div>
+
+    <div class="scraper-grid">
+
+      <!-- Sources -->
+      <div class="scraper-card">
+        <div class="scraper-card-h">Active sources</div>
+        <div class="scraper-card-d">Where the system is currently pulling architect contact data from.</div>
+        <div class="source-list">
+          <div class="source-item">
+            <div class="source-status active"></div>
+            <div class="source-info">
+              <div class="source-name">RIBA Directory</div>
+              <div class="source-meta">UK chartered architects · filtered by region &amp; firm size</div>
+            </div>
+            <div class="source-stat">847 contacts</div>
+          </div>
+          <div class="source-item">
+            <div class="source-status active"></div>
+            <div class="source-info">
+              <div class="source-name">Companies House</div>
+              <div class="source-meta">Recently incorporated UK practices · last 24 months</div>
+            </div>
+            <div class="source-stat">312 contacts</div>
+          </div>
+          <div class="source-item">
+            <div class="source-status active"></div>
+            <div class="source-info">
+              <div class="source-name">LinkedIn — Directors</div>
+              <div class="source-meta">Senior architects &amp; founders at UK practices</div>
+            </div>
+            <div class="source-stat">1,204 contacts</div>
+          </div>
+          <div class="source-item">
+            <div class="source-status idle"></div>
+            <div class="source-info">
+              <div class="source-name">Architects' Journal directory</div>
+              <div class="source-meta">Add this source to widen reach by ~25%</div>
+            </div>
+            <div class="source-stat" style="color:var(--ink3)">— inactive</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters / Criteria -->
+      <div class="scraper-card">
+        <div class="scraper-card-h">Targeting criteria</div>
+        <div class="scraper-card-d">The rules used to qualify a lead before it enters your pipeline.</div>
+        <div class="criteria-list">
+          <div class="criteria-row"><div class="criteria-l">Country</div><div class="criteria-v">United Kingdom only</div></div>
+          <div class="criteria-row"><div class="criteria-l">Region focus</div><div class="criteria-v">South East · London · Surrey · Kent · Sussex</div></div>
+          <div class="criteria-row"><div class="criteria-l">Firm size</div><div class="criteria-v">Sole — 25 staff</div></div>
+          <div class="criteria-row"><div class="criteria-l">Project type</div><div class="criteria-v">Residential, listed buildings, planning concepts</div></div>
+          <div class="criteria-row"><div class="criteria-l">In-house viz</div><div class="criteria-v">No / unknown only</div></div>
+          <div class="criteria-row"><div class="criteria-l">Recently active</div><div class="criteria-v">Live planning submissions in last 90 days</div></div>
+          <div class="criteria-row"><div class="criteria-l">Excluded</div><div class="criteria-v">Already-quoted firms · 50+ staff practices</div></div>
+        </div>
+        <button class="btn" style="margin-top:14px;width:100%">Edit criteria</button>
+      </div>
+    </div>
+
+    <!-- Live activity feed -->
+    <div class="scraper-feed">
+      <div class="scraper-card-h" style="margin-bottom:6px">Live activity feed</div>
+      <div class="scraper-card-d" style="margin-bottom:14px">Real-time view of leads being discovered &amp; qualified.</div>
+      <div class="feed-list" id="feed-list">
+        <div class="feed-item">
+          <div class="feed-time">09:42</div>
+          <div class="feed-icon ok">✓</div>
+          <div class="feed-text"><b>Sarah Whitfield</b> qualified · Witherford Watson Mann · London EC1 · ICP match score <b>92/100</b></div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-time">09:38</div>
+          <div class="feed-icon ok">✓</div>
+          <div class="feed-text"><b>Priya Nair</b> qualified · Nair Studio · Reigate · ICP match score <b>88/100</b> · Local match bonus</div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-time">09:34</div>
+          <div class="feed-icon scan">●</div>
+          <div class="feed-text">Scanning <b>RIBA directory</b> · Surrey postcodes · 23 new entries to evaluate</div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-time">09:31</div>
+          <div class="feed-icon ok">✓</div>
+          <div class="feed-text"><b>James Henderson</b> qualified · Henderson + Pollard · Tunbridge Wells · ICP match score <b>79/100</b></div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-time">09:28</div>
+          <div class="feed-icon skip">−</div>
+          <div class="feed-text"><b>BDP London</b> excluded · 380+ staff · above firm-size threshold</div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-time">09:26</div>
+          <div class="feed-icon ok">✓</div>
+          <div class="feed-text"><b>Anya Kowalski</b> qualified · Studio Kowalski · Guildford · ICP match score <b>74/100</b></div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-time">09:23</div>
+          <div class="feed-icon scan">●</div>
+          <div class="feed-text">Scanning <b>Companies House</b> · architecture practices incorporated since Apr 2024</div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-time">09:18</div>
+          <div class="feed-icon ok">✓</div>
+          <div class="feed-text"><b>Hannah Pierce</b> qualified · Pierce Atelier · Brighton · ICP match score <b>81/100</b></div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-time">09:14</div>
+          <div class="feed-icon ok">✓</div>
+          <div class="feed-text"><b>Michael Aaronson</b> qualified · Aaronson + Coyle Architects · Brighton · ICP match score <b>86/100</b></div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-time">09:09</div>
+          <div class="feed-icon skip">−</div>
+          <div class="feed-text"><b>Foster + Partners</b> excluded · already in your blocklist</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent leads grid -->
+    <div class="section-h" style="margin-top:24px">
+      <div>
+        <div class="section-t">Recently qualified</div>
+        <div class="section-d">Leads added to your pipeline in the last 24 hours</div>
+      </div>
+    </div>
+    <div class="recent-grid">
+      <div class="recent-card">
+        <div class="recent-h"><div class="recent-name">Sarah Whitfield</div><div class="match">92</div></div>
+        <div class="recent-firm">Witherford Watson Mann</div>
+        <div class="recent-meta">London EC1 · 12–20 staff · Heritage residential</div>
+        <div class="recent-tags"><span class="tag">RIBA</span><span class="tag">Active brief</span></div>
+      </div>
+      <div class="recent-card">
+        <div class="recent-h"><div class="recent-name">Michael Aaronson</div><div class="match">86</div></div>
+        <div class="recent-firm">Aaronson + Coyle Architects</div>
+        <div class="recent-meta">Brighton · 2 partners · Mixed residential</div>
+        <div class="recent-tags"><span class="tag">LinkedIn</span><span class="tag">South coast</span></div>
+      </div>
+      <div class="recent-card">
+        <div class="recent-h"><div class="recent-name">Priya Nair</div><div class="match">88</div></div>
+        <div class="recent-firm">Nair Studio</div>
+        <div class="recent-meta">Reigate · 4 architects · Modern residential</div>
+        <div class="recent-tags"><span class="tag">RIBA</span><span class="tag">Local</span></div>
+      </div>
+      <div class="recent-card">
+        <div class="recent-h"><div class="recent-name">James Henderson</div><div class="match">79</div></div>
+        <div class="recent-firm">Henderson + Pollard</div>
+        <div class="recent-meta">Tunbridge Wells · 6 architects · Listed buildings</div>
+        <div class="recent-tags"><span class="tag">LinkedIn</span></div>
+      </div>
+      <div class="recent-card">
+        <div class="recent-h"><div class="recent-name">Anya Kowalski</div><div class="match">74</div></div>
+        <div class="recent-firm">Studio Kowalski</div>
+        <div class="recent-meta">Guildford · Sole practice · Self-build clients</div>
+        <div class="recent-tags"><span class="tag">RIBA</span><span class="tag">Local</span></div>
+      </div>
+      <div class="recent-card">
+        <div class="recent-h"><div class="recent-name">Hannah Pierce</div><div class="match">81</div></div>
+        <div class="recent-firm">Pierce Atelier</div>
+        <div class="recent-meta">Brighton · 2 architects · New-build residential</div>
+        <div class="recent-tags"><span class="tag">Companies House</span></div>
+      </div>
+    </div>
+
+  </div><!-- /panel-scraper -->
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- OUTREACH ENGINE PANEL                                                -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <div class="panel" id="panel-outreach" style="display:none">
+
+    <div class="outreach-status-bar">
+      <div class="pulse-dot"></div>
+      <div>
+        <div class="outreach-status-t">Outreach engine · Active</div>
+        <div class="outreach-status-d">Sending to <b>53 architects</b> today across cold &amp; follow-up sequences</div>
+      </div>
+      <div style="margin-left:auto"><button class="btn">Pause sending</button> <button class="btn primary">Edit sequence</button></div>
+    </div>
+
+    <!-- Sequence visual -->
+    <div class="section-h">
+      <div>
+        <div class="section-t">3-stage cold outreach sequence</div>
+        <div class="section-d">Each architect moves through this sequence automatically. Replies pause sending and ping you immediately.</div>
+      </div>
+    </div>
+
+    <div class="sequence-flow">
+
+      <div class="seq-stage">
+        <div class="seq-stage-num">Day 0</div>
+        <div class="seq-stage-t">Initial cold email</div>
+        <div class="seq-email">
+          <div class="seq-email-h">
+            <div><b>Subject</b></div>
+            <div class="seq-email-stat">412 sent · 38% open · 6% reply</div>
+          </div>
+          <div class="seq-email-subject">30-second 3D for your stage 4 submissions, {{firm_name}}?</div>
+          <div class="seq-email-body">
+Hi <em>{{first_name}}</em>,<br><br>
+Saw <em>{{firm_name}}</em>'s recent residential work — beautiful detailing on the {{recent_project_reference}}. Quick question: when your client wants to <em>see</em> a proposal in 3D before construction, where does that currently come from?<br><br>
+I'm a UK-based archviz studio. Architects send me 2D plans, I send back photoreal 3D stills and fly-throughs in 3–5 working days, white-labelled to your practice. Typical cost: £400–£3k depending on scope.<br><br>
+Worth a quick chat? I can show you a couple of recent examples that match the kind of work you do.<br><br>
+Doug
+          </div>
+        </div>
+      </div>
+
+      <div class="seq-arrow">↓ no reply within 3 days</div>
+
+      <div class="seq-stage">
+        <div class="seq-stage-num">Day 3</div>
+        <div class="seq-stage-t">Follow-up — value-add</div>
+        <div class="seq-email">
+          <div class="seq-email-h">
+            <div><b>Subject</b></div>
+            <div class="seq-email-stat">96 sent · 41% open · <b style="color:var(--grn)">14% reply</b></div>
+          </div>
+          <div class="seq-email-subject">A couple of recent residentials, {{first_name}}</div>
+          <div class="seq-email-body">
+Hi <em>{{first_name}}</em>,<br><br>
+Quick nudge — wanted to share a couple of recent jobs in case it's helpful before you decide on anything.<br><br>
+The first is a Grade II listed refurb in Sevenoaks (delivered last week, 2 stills + flythrough, £1,950). The second is a new-build family home outside Brighton (3 stills, £1,400). Both turned around in under a week, both white-labelled to the architect.<br><br>
+Happy to send the full set if useful.<br><br>
+Doug
+          </div>
+        </div>
+      </div>
+
+      <div class="seq-arrow">↓ no reply within 7 days</div>
+
+      <div class="seq-stage">
+        <div class="seq-stage-num">Day 7</div>
+        <div class="seq-stage-t">Follow-up — soft scarcity</div>
+        <div class="seq-email">
+          <div class="seq-email-h">
+            <div><b>Subject</b></div>
+            <div class="seq-email-stat">42 sent · 28% open · 9% reply</div>
+          </div>
+          <div class="seq-email-subject">Locking my May calendar this week</div>
+          <div class="seq-email-body">
+Hi <em>{{first_name}}</em>,<br><br>
+Locking my May availability this week — wanted to flag in case <em>{{firm_name}}</em> has anything coming up. Got two slots left this month.<br><br>
+If now's not the right time, totally understand — happy to circle back later in the year. Just didn't want to assume.<br><br>
+Doug
+          </div>
+        </div>
+      </div>
+
+      <div class="seq-arrow">↓ no reply within 14 days</div>
+
+      <div class="seq-stage final">
+        <div class="seq-stage-num">Day 14</div>
+        <div class="seq-stage-t">Final touch — break-up</div>
+        <div class="seq-email">
+          <div class="seq-email-h">
+            <div><b>Subject</b></div>
+            <div class="seq-email-stat">21 sent · 19% open · <b style="color:var(--accent)">23% reply</b></div>
+          </div>
+          <div class="seq-email-subject">Closing the file on {{firm_name}}</div>
+          <div class="seq-email-body">
+Hi <em>{{first_name}}</em>,<br><br>
+Closing my file on this so I'm not cluttering your inbox. If 3D viz isn't useful right now, no worries at all. If something comes up later in the year — just reply to any of my emails and we'll pick it up.<br><br>
+Best of luck with everything,<br>
+Doug
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Live sending stream -->
+    <div class="section-h" style="margin-top:32px">
+      <div>
+        <div class="section-t">Sending right now</div>
+        <div class="section-d">Live view of emails being sent on your behalf today</div>
+      </div>
+    </div>
+
+    <div class="send-table">
+      <div class="send-thr">
+        <div>Recipient</div><div>Stage</div><div>Subject</div><div>Status</div><div>Time</div>
+      </div>
+      <div class="send-row">
+        <div class="send-rec"><b>Sarah Whitfield</b><small>Witherford Watson Mann</small></div>
+        <div><span class="seq-pill seq-day3">Day 3</span></div>
+        <div class="send-subj">A couple of recent residentials, Sarah</div>
+        <div><span class="send-status sent">Delivered · Opened</span></div>
+        <div class="send-time">09:14</div>
+      </div>
+      <div class="send-row">
+        <div class="send-rec"><b>James Henderson</b><small>Henderson + Pollard</small></div>
+        <div><span class="seq-pill seq-day7">Day 7</span></div>
+        <div class="send-subj">Locking my May calendar this week</div>
+        <div><span class="send-status sent">Delivered</span></div>
+        <div class="send-time">09:08</div>
+      </div>
+      <div class="send-row">
+        <div class="send-rec"><b>Tom Bradley</b><small>Bradley Architects</small></div>
+        <div><span class="seq-pill seq-day0">Cold</span></div>
+        <div class="send-subj">30-second 3D for your stage 4 submissions, Bradley Architects?</div>
+        <div><span class="send-status sent">Delivered</span></div>
+        <div class="send-time">08:55</div>
+      </div>
+      <div class="send-row">
+        <div class="send-rec"><b>Robert Chen</b><small>Chen Atelier</small></div>
+        <div><span class="seq-pill seq-day14">Day 14</span></div>
+        <div class="send-subj">Closing the file on Chen Atelier</div>
+        <div><span class="send-status pending">Sending in 12 min...</span></div>
+        <div class="send-time">10:00</div>
+      </div>
+      <div class="send-row">
+        <div class="send-rec"><b>Anya Kowalski</b><small>Studio Kowalski</small></div>
+        <div><span class="seq-pill seq-day3">Day 3</span></div>
+        <div class="send-subj">A couple of recent residentials, Anya</div>
+        <div><span class="send-status pending">Queued · 10:12</span></div>
+        <div class="send-time">—</div>
+      </div>
+      <div class="send-row">
+        <div class="send-rec"><b>Priya Nair</b><small>Nair Studio</small></div>
+        <div><span class="seq-pill seq-day0">Cold</span></div>
+        <div class="send-subj">30-second 3D for your stage 4 submissions, Nair Studio?</div>
+        <div><span class="send-status pending">Queued · 10:24</span></div>
+        <div class="send-time">—</div>
+      </div>
+    </div>
+
+  </div><!-- /panel-outreach -->
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- COMMUNICATIONS / INBOX PANEL                                         -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <div class="panel" id="panel-inbox" style="display:none">
+    <div class="inbox-app">
+      <div class="inbox-list">
+        <div class="inbox-list-h">
+          <div>Inbox <span style="color:var(--ink3);font-weight:400">· 3 needing reply</span></div>
+        </div>
+        <div class="inbox-thread act">
+          <div class="thread-h"><div class="thread-name">Sarah Whitfield</div><div class="thread-time">22:14</div></div>
+          <div class="thread-firm">Witherford Watson Mann</div>
+          <div class="thread-snippet">Could you send a couple of recent residential examples? We've got a Grade II refurb hitting Stage 4...</div>
+          <div class="thread-tag urgent">Reply ready</div>
+        </div>
+        <div class="thread-divider"></div>
+        <div class="inbox-thread">
+          <div class="thread-h"><div class="thread-name">Anya Kowalski</div><div class="thread-time">Yesterday</div></div>
+          <div class="thread-firm">Studio Kowalski</div>
+          <div class="thread-snippet">Hi Doug, thanks for the email. Could you send your portfolio over? I've got a self-build...</div>
+          <div class="thread-tag urgent">Reply ready</div>
+        </div>
+        <div class="thread-divider"></div>
+        <div class="inbox-thread">
+          <div class="thread-h"><div class="thread-name">Eleanor Marsh</div><div class="thread-time">2 days ago</div></div>
+          <div class="thread-firm">Marsh + Stone</div>
+          <div class="thread-snippet">Deposit paid, brief attached. Looking forward to seeing the first draft! Aiming for...</div>
+          <div class="thread-tag won">Won · brief in</div>
+        </div>
+        <div class="thread-divider"></div>
+        <div class="inbox-thread">
+          <div class="thread-h"><div class="thread-name">Robert Chen</div><div class="thread-time">5 days ago</div></div>
+          <div class="thread-firm">Chen Atelier</div>
+          <div class="thread-snippet">I sent over the quote on Friday — happy to walk through it on a quick call if useful...</div>
+          <div class="thread-tag chase">Chase due</div>
+        </div>
+        <div class="thread-divider"></div>
+        <div class="inbox-thread">
+          <div class="thread-h"><div class="thread-name">James Henderson</div><div class="thread-time">7 days ago</div></div>
+          <div class="thread-firm">Henderson + Pollard</div>
+          <div class="thread-snippet">Quote received, will discuss with my partner and come back to you this week...</div>
+          <div class="thread-tag">Quoted</div>
+        </div>
+      </div>
+
+      <div class="inbox-thread-detail">
+        <div class="thread-d-h">
+          <div>
+            <div class="thread-d-name">Sarah Whitfield</div>
+            <div class="thread-d-meta">sarah.w@wwmarchitects.co.uk · Witherford Watson Mann · London EC1</div>
+          </div>
+          <div class="thread-d-actions">
+            <button class="btn">Mark as won</button>
+            <button class="btn">Profile</button>
+          </div>
+        </div>
+
+        <div class="thread-msg">
+          <div class="msg-h"><div class="msg-from">Doug Goldring → Sarah</div><div class="msg-time">23 Apr · 14:32</div></div>
+          <div class="msg-subject">30-second 3D for your stage 4 submissions, Witherford Watson Mann?</div>
+          <div class="msg-body">Hi Sarah,<br><br>Saw Witherford Watson Mann's recent residential work — beautiful detailing on the Bermondsey Mews project. Quick question: when your client wants to see a proposal in 3D before construction, where does that currently come from?<br><br>I'm a UK-based archviz studio. Architects send me 2D plans, I send back photoreal 3D stills and fly-throughs in 3–5 working days, white-labelled to your practice...</div>
+        </div>
+
+        <div class="thread-msg">
+          <div class="msg-h"><div class="msg-from">Doug Goldring → Sarah</div><div class="msg-time">30 Apr · 09:00</div><div class="msg-tag day3">Day 3 follow-up</div></div>
+          <div class="msg-subject">A couple of recent residentials, Sarah</div>
+          <div class="msg-body">Hi Sarah,<br><br>Quick nudge — wanted to share a couple of recent jobs in case it's helpful before you decide on anything.<br><br>The first is a Grade II listed refurb in Sevenoaks (delivered last week, 2 stills + flythrough, £1,950)...</div>
+          <div class="msg-meta">Opened 2× · clicked portfolio link</div>
+        </div>
+
+        <div class="thread-msg incoming">
+          <div class="msg-h"><div class="msg-from"><b>Sarah → Doug</b></div><div class="msg-time">30 Apr · 22:14</div></div>
+          <div class="msg-subject">RE: A couple of recent residentials, Sarah</div>
+          <div class="msg-body">Hi Doug,<br><br>Could you send a couple of recent residential examples? We've got a Grade II refurb hitting Stage 4 in three weeks and the client wants to see massings before the planning submission goes in.<br><br>Particularly interested in anything with conservation officer feedback baked into the design — that's been a sticking point for us recently.<br><br>Best,<br>Sarah</div>
+        </div>
+
+        <div class="thread-draft">
+          <div class="draft-h"><div class="draft-eyebrow">Suggested reply · ready to send</div><div class="draft-time">Drafted 06:30 today</div></div>
+          <div class="msg-subject">Sarah — Grade II residentials, ready Friday</div>
+          <div class="msg-body">Got two recent residential examples that match your description — both Grade II conservation work, both stage 4 submissions, both rendered in under five working days. Sending them through with a couple of fly-throughs.<br><br>For the conservation officer angle — we did one in Tunbridge Wells last month where we deliberately rendered three different roof material options side by side, which made the comparison call with the CO much more straightforward. Happy to walk you through the approach.<br><br>Want to jump on a quick call Tuesday morning to talk through your specific brief?<br><br>Doug</div>
+          <div class="draft-actions">
+            <button class="btn primary">Approve &amp; send</button>
+            <button class="btn">Edit</button>
+            <button class="btn">Generate alternative</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /panel-inbox -->
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- PROJECT INTAKE PANEL                                                 -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <div class="panel" id="panel-intake" style="display:none">
+
+    <div class="intake-status-bar">
+      <div class="pulse-dot"></div>
+      <div>
+        <div class="outreach-status-t">Project intake · 3 active</div>
+        <div class="outreach-status-d">Onboarding pack auto-fires the moment an architect signs &amp; pays deposit. Tracks every file Doug needs to start modelling.</div>
+      </div>
+    </div>
+
+    <div class="intake-app">
+
+      <!-- Active intakes list -->
+      <div class="intake-list">
+        <div class="intake-list-h">Active intakes</div>
+
+        <div class="intake-item act">
+          <div class="intake-item-h">
+            <div>
+              <div class="intake-item-name">Eleanor Marsh</div>
+              <div class="intake-item-firm">Marsh + Stone Architects</div>
+            </div>
+            <div class="intake-progress-mini">
+              <div class="intake-progress-bar"><div class="intake-progress-fill" style="width:50%"></div></div>
+              <div class="intake-progress-l">5 / 10</div>
+            </div>
+          </div>
+          <div class="intake-item-meta">Started 30 Apr · Brief due 5 May · <b style="color:var(--amb)">3 items chased today</b></div>
+        </div>
+
+        <div class="intake-divider"></div>
+
+        <div class="intake-item">
+          <div class="intake-item-h">
+            <div>
+              <div class="intake-item-name">Henry Castell</div>
+              <div class="intake-item-firm">Castell Architecture</div>
+            </div>
+            <div class="intake-progress-mini">
+              <div class="intake-progress-bar"><div class="intake-progress-fill" style="width:90%"></div></div>
+              <div class="intake-progress-l">9 / 10</div>
+            </div>
+          </div>
+          <div class="intake-item-meta">Started 28 Apr · <b style="color:var(--grn)">Ready to start modelling</b></div>
+        </div>
+
+        <div class="intake-divider"></div>
+
+        <div class="intake-item">
+          <div class="intake-item-h">
+            <div>
+              <div class="intake-item-name">Sophie Reed</div>
+              <div class="intake-item-firm">Reed &amp; Bevan</div>
+            </div>
+            <div class="intake-progress-mini">
+              <div class="intake-progress-bar"><div class="intake-progress-fill" style="width:20%"></div></div>
+              <div class="intake-progress-l">2 / 10</div>
+            </div>
+          </div>
+          <div class="intake-item-meta">Started 1 May · <b style="color:var(--ink3)">Awaiting first response</b></div>
+        </div>
+      </div>
+
+      <!-- Detail view -->
+      <div class="intake-detail">
+
+        <div class="intake-detail-h">
+          <div>
+            <div class="intake-detail-name">Eleanor Marsh</div>
+            <div class="intake-detail-sub">Marsh + Stone Architects · Sevenoaks · Project: <b>Listed Townhouse Refurb, Sevenoaks TN13</b></div>
+          </div>
+          <div class="intake-detail-actions">
+            <button class="btn">Open project folder</button>
+            <button class="btn primary">Send manual chase</button>
+          </div>
+        </div>
+
+        <!-- Project summary card -->
+        <div class="intake-summary">
+          <div class="intake-summary-i"><div class="intake-summary-l">Deal value</div><div class="intake-summary-v">£2,100</div></div>
+          <div class="intake-summary-i"><div class="intake-summary-l">Scope</div><div class="intake-summary-v">4 stills + 1 flythrough</div></div>
+          <div class="intake-summary-i"><div class="intake-summary-l">Deadline</div><div class="intake-summary-v">10 May 2026</div></div>
+          <div class="intake-summary-i"><div class="intake-summary-l">Deposit</div><div class="intake-summary-v" style="color:var(--grn)">Paid ✓ £1,050</div></div>
+        </div>
+
+        <!-- Auto-fired email -->
+        <div class="intake-email">
+          <div class="intake-email-h">
+            <div class="intake-email-eyebrow">Onboarding email · auto-sent</div>
+            <div class="intake-email-time">30 Apr · 14:31 · 3 minutes after deposit confirmed</div>
+          </div>
+          <div class="intake-email-meta"><b>To:</b> eleanor@marshstone.co.uk &nbsp;·&nbsp; <b>From:</b> doug@goldringdesigns.co.uk</div>
+          <div class="msg-subject" style="margin-top:10px">Welcome to Goldring — let's get your project rolling</div>
+          <div class="intake-email-body">
+            Hi Eleanor,<br><br>
+            Brilliant — really excited to be working with Marsh + Stone on the Sevenoaks listed townhouse.<br><br>
+            To hit your deadline of 10 May and get the first round of stills back to you in 5 working days, here's what I'll need from your end. Drop everything into your project folder:<br><br>
+            <span class="intake-link">📂 drive.goldringdesigns.co.uk/projects/marsh-stone-may-26</span><br><br>
+            <b>Required to start the build:</b><br>
+            ☐ Site plan (PDF or DWG)<br>
+            ☐ Floor plans (each level)<br>
+            ☐ Elevation drawings<br>
+            ☐ Section drawings<br>
+            ☐ Material &amp; finishes schedule<br><br>
+            <b>Helpful but not blocking:</b><br>
+            ☐ Mood board / style references<br>
+            ☐ Site photos for context<br>
+            ☐ Conservation officer notes (relevant for listed work)<br>
+            ☐ Anything specific the client wants highlighted<br><br>
+            <b>Three quick brief questions:</b><br>
+            • Time of day for the renders — morning light, golden hour, overcast?<br>
+            • Any particular angles or features to emphasise?<br>
+            • Final delivery resolution — print or digital?<br><br>
+            Reply when ready and I'll start the model build. Anything you can't get hold of, just shout.<br><br>
+            Doug
+          </div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="section-h" style="margin-top:24px;margin-bottom:14px">
+          <div>
+            <div class="section-t">Intake checklist</div>
+            <div class="section-d">Files &amp; info needed before starting the model build · auto-chases pending items at day 2 &amp; day 4</div>
+          </div>
+          <div class="intake-progress-bar-large">
+            <div class="intake-progress-bar" style="width:160px"><div class="intake-progress-fill" style="width:50%"></div></div>
+            <div style="font-size:11.5px;color:var(--ink3);font-weight:500"><b style="color:var(--ink)">5 of 10</b> received · <b style="color:var(--amb)">5 pending</b></div>
+          </div>
+        </div>
+
+        <div class="intake-checklist">
+
+          <div class="check-section">Required to start</div>
+
+          <div class="check-row received">
+            <div class="check-icon ok">✓</div>
+            <div class="check-content">
+              <div class="check-title">Site plan</div>
+              <div class="check-meta">Received 1 May · 09:14 · <b>Site_plans_v2.pdf</b> · 2.4 MB</div>
+            </div>
+            <div class="check-action"><button class="icon-btn" title="View file">↗</button></div>
+          </div>
+
+          <div class="check-row received">
+            <div class="check-icon ok">✓</div>
+            <div class="check-content">
+              <div class="check-title">Floor plans</div>
+              <div class="check-meta">Received 1 May · 09:16 · <b>Floor_plans_GF_FF.dwg</b> · 4.1 MB</div>
+            </div>
+            <div class="check-action"><button class="icon-btn">↗</button></div>
+          </div>
+
+          <div class="check-row pending">
+            <div class="check-icon pend">⏱</div>
+            <div class="check-content">
+              <div class="check-title">Elevation drawings</div>
+              <div class="check-meta">Pending · <b style="color:var(--amb)">First chase scheduled tomorrow 09:00</b></div>
+            </div>
+            <div class="check-action"><button class="btn" style="font-size:11px;padding:5px 10px">Chase now</button></div>
+          </div>
+
+          <div class="check-row pending">
+            <div class="check-icon pend">⏱</div>
+            <div class="check-content">
+              <div class="check-title">Section drawings</div>
+              <div class="check-meta">Pending · First chase scheduled tomorrow 09:00</div>
+            </div>
+            <div class="check-action"><button class="btn" style="font-size:11px;padding:5px 10px">Chase now</button></div>
+          </div>
+
+          <div class="check-row received">
+            <div class="check-icon ok">✓</div>
+            <div class="check-content">
+              <div class="check-title">Material &amp; finishes schedule</div>
+              <div class="check-meta">Received 30 Apr · 16:48 · <b>Materials_schedule_v1.xlsx</b> · 84 KB</div>
+            </div>
+            <div class="check-action"><button class="icon-btn">↗</button></div>
+          </div>
+
+          <div class="check-section" style="margin-top:14px">Helpful — not blocking</div>
+
+          <div class="check-row received">
+            <div class="check-icon ok">✓</div>
+            <div class="check-content">
+              <div class="check-title">Mood board / style references</div>
+              <div class="check-meta">Received 30 Apr · 17:22 · <b>3 reference images</b> · Pinterest collection link</div>
+            </div>
+            <div class="check-action"><button class="icon-btn">↗</button></div>
+          </div>
+
+          <div class="check-row pending">
+            <div class="check-icon pend">⏱</div>
+            <div class="check-content">
+              <div class="check-title">Site photos</div>
+              <div class="check-meta">Pending · Will only chase once if needed</div>
+            </div>
+            <div class="check-action"><button class="btn" style="font-size:11px;padding:5px 10px">Chase now</button></div>
+          </div>
+
+          <div class="check-row received">
+            <div class="check-icon ok">✓</div>
+            <div class="check-content">
+              <div class="check-title">Conservation officer notes</div>
+              <div class="check-meta">Received 30 Apr · 16:51 · <b>CO_feedback_summary.pdf</b> · 312 KB</div>
+            </div>
+            <div class="check-action"><button class="icon-btn">↗</button></div>
+          </div>
+
+          <div class="check-section" style="margin-top:14px">Brief questions</div>
+
+          <div class="check-row pending">
+            <div class="check-icon pend">⏱</div>
+            <div class="check-content">
+              <div class="check-title">Lighting preference</div>
+              <div class="check-meta">Pending · "Time of day — morning, golden hour, overcast?"</div>
+            </div>
+            <div class="check-action"><button class="btn" style="font-size:11px;padding:5px 10px">Chase now</button></div>
+          </div>
+
+          <div class="check-row pending">
+            <div class="check-icon pend">⏱</div>
+            <div class="check-content">
+              <div class="check-title">Final deliverable resolution</div>
+              <div class="check-meta">Pending · "Print or digital?"</div>
+            </div>
+            <div class="check-action"><button class="btn" style="font-size:11px;padding:5px 10px">Chase now</button></div>
+          </div>
+        </div>
+
+        <!-- Auto-chase preview -->
+        <div class="intake-chase-card">
+          <div class="intake-chase-h">
+            <div>
+              <div class="intake-chase-eyebrow">Auto-chase queued · day 2</div>
+              <div class="intake-chase-t">Reminder firing tomorrow at 09:00</div>
+            </div>
+            <button class="btn">Edit before sending</button>
+          </div>
+          <div class="msg-subject" style="margin-top:8px">Quick nudge — a few items still to drop in your project folder</div>
+          <div class="intake-email-body">
+            Hi Eleanor,<br><br>
+            Just a friendly nudge — to keep us on track for your 10 May deadline I'll need <b>elevations, sections, lighting preference, and final resolution</b> at some point in the next day or two. Conservation notes and materials are in already (cheers for those).<br><br>
+            Drop them into the same project folder when you've got them, and shout if anything's tricky to track down.<br><br>
+            Doug
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /panel-intake -->
+
+  <!-- Other panels (placeholder content) -->
+  <div class="panel" id="panel-pipeline" style="display:none"><div class="placeholder"><h2>Full Pipeline</h2><p>Comprehensive pipeline view — covered by the Dashboard's pipeline section in this demo.</p></div></div>
+  <div class="panel" id="panel-architects" style="display:none"><div class="placeholder"><h2>Architects Directory</h2><p>Full searchable directory of all 156 architects in your database.</p></div></div>
+  <div class="panel" id="panel-analytics" style="display:none"><div class="placeholder"><h2>Analytics</h2><p>Conversion funnels, revenue forecasting, sequence performance over time.</p></div></div>
+  <div class="panel" id="panel-activity" style="display:none"><div class="placeholder"><h2>Activity Log</h2><p>Full audit trail of every email sent, opened, replied to, and every status change.</p></div></div>
+  <div class="panel" id="panel-settings" style="display:none"><div class="placeholder"><h2>Settings</h2><p>Account, billing, scraper criteria, email templates, integrations.</p></div></div>
+
+  </div><!-- /body -->
+
+  <div class="foot">
+    <div>Goldring Designs · White-Label Drawing, Survey &amp; 3D Visualisation Support · Pipeline v1.0</div>
+    <div>Powered by Quantistic Systems · synced 09:42</div>
+  </div>
+
+</main>
+</div>
+
+<script>
+function toggleDrawer(rowEl){
+  const drawer = rowEl.nextElementSibling;
+  if (!drawer || !drawer.classList.contains('drawer')) return;
+  // close any other open drawer
+  document.querySelectorAll('.drawer.open').forEach(d => { if (d !== drawer) { d.classList.remove('open'); d.previousElementSibling.classList.remove('expanded'); } });
+  const open = drawer.classList.toggle('open');
+  rowEl.classList.toggle('expanded', open);
+}
+
+// Filter pills (visual only for demo)
+document.querySelectorAll('.fp').forEach(b => b.addEventListener('click', e => {
+  document.querySelectorAll('.fp').forEach(x => x.classList.remove('act'));
+  b.classList.add('act');
+}));
+
+// Panel switching
+const PANEL_TITLES = {
+  'dashboard': {title:'Good morning, Doug', sub:'Friday, 1 May 2026 · 3 priority actions for today'},
+  'scraper':   {title:'Lead scraper', sub:'Live view of architects being discovered &amp; qualified for your pipeline'},
+  'outreach':  {title:'Outreach engine', sub:'3-stage email sequence sending automatically on your behalf'},
+  'inbox':     {title:'Communications', sub:'All conversations with architects · 3 needing reply'},
+  'intake':    {title:'Project intake', sub:'Onboarding new wins · automatically gathering everything Doug needs to start modelling'},
+  'pipeline':  {title:'Pipeline', sub:'42 architects currently in motion'},
+  'architects':{title:'Architects', sub:'Full directory of qualified contacts in your database'},
+  'analytics': {title:'Analytics', sub:'Conversion, performance and revenue insights'},
+  'activity':  {title:'Activity log', sub:'Full audit trail of every action taken'},
+  'settings':  {title:'Settings', sub:'Account, billing, scraper criteria, email templates'}
+};
+
+function showPanel(name, navEl){
+  document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
+  const target = document.getElementById('panel-' + name);
+  if (target) target.style.display = '';
+  document.querySelectorAll('.nav-i').forEach(n => n.classList.remove('act'));
+  if (navEl) navEl.classList.add('act');
+  const meta = PANEL_TITLES[name];
+  if (meta) {
+    document.querySelector('.top-l h1').textContent = meta.title;
+    document.querySelector('.top-l p').innerHTML = meta.sub;
+  }
+  window.scrollTo(0,0);
+}
+
+// Tiny live-feed animation for the scraper panel — adds a new entry every ~6s while panel is visible
+const SAMPLE_FEED = [
+  {icon:'ok', text:'<b>Ravi Patel</b> qualified · Patel + Ross Architects · Hove · ICP match score <b>83/100</b>'},
+  {icon:'scan', text:'Scanning <b>LinkedIn</b> · Senior Architects in Surrey'},
+  {icon:'ok', text:'<b>Liam O\'Donnell</b> qualified · ODA Studio · Crawley · ICP match score <b>71/100</b>'},
+  {icon:'skip', text:'<b>Foster + Partners</b> excluded · already in your blocklist'},
+  {icon:'ok', text:'<b>Eleanor Ashworth</b> qualified · Ashworth Architects · Tunbridge Wells · ICP match score <b>87/100</b>'}
+];
+let feedIdx = 0;
+setInterval(() => {
+  const scraper = document.getElementById('panel-scraper');
+  if (!scraper || scraper.style.display === 'none') return;
+  const list = document.getElementById('feed-list');
+  if (!list) return;
+  const sample = SAMPLE_FEED[feedIdx % SAMPLE_FEED.length];
+  feedIdx++;
+  const now = new Date();
+  const time = now.toTimeString().slice(0,5);
+  const item = document.createElement('div');
+  item.className = 'feed-item';
+  item.innerHTML = `<div class="feed-time">${time}</div><div class="feed-icon ${sample.icon}">${sample.icon==='ok'?'✓':sample.icon==='scan'?'●':'−'}</div><div class="feed-text">${sample.text}</div>`;
+  list.insertBefore(item, list.firstChild);
+  // Bump today counter when it's a qualify event
+  if (sample.icon === 'ok') {
+    const cnt = document.getElementById('cnt-today');
+    if (cnt) cnt.textContent = parseInt(cnt.textContent || '14') + 1;
+  }
+  // Keep list trim
+  while (list.children.length > 14) list.removeChild(list.lastChild);
+}, 6500);
+
+/* ═════════════════════════════════════════════════════════════════ */
+/* LIVE BACKEND INTEGRATION — Pipeline panel                          */
+/* ═════════════════════════════════════════════════════════════════ */
+
+const API_BASE = 'https://quantistic-crm-backend.onrender.com';
+const AGENCY   = localStorage.getItem('goldring_agency') || 'goldring';
+const API_KEY  = localStorage.getItem('goldring_token');
+
+// Auth gate — must be signed in
+if (!API_KEY) {
+  window.location.href = 'login.html';
+}
+
+// Logout helper
+function logout() {
+  localStorage.removeItem('goldring_token');
+  localStorage.removeItem('goldring_agency');
+  localStorage.removeItem('goldring_user');
+  window.location.href = 'login.html';
+}
+
+let LEADS = [];
+let FILTER = 'all';
+let SEARCH = '';
+
+async function api(path, opts = {}) {
+  const res = await fetch(API_BASE + path, {
+    ...opts,
+    headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY, ...(opts.headers || {}) }
+  });
+  if (res.status === 401) { logout(); throw new Error('Session expired'); }
+  if (!res.ok) throw new Error(res.status + ' ' + (await res.text().catch(()=>'')));
+  return res.json();
+}
+
+function setConn(state, text) {
+  const dot = document.getElementById('conn-dot');
+  const txt = document.getElementById('conn-text');
+  if (!dot || !txt) return;
+  dot.style.background = state === 'live' ? '#2d6e2d' : state === 'err' ? '#a83232' : '#a8a8a8';
+  dot.style.boxShadow = state === 'live' ? '0 0 0 3px rgba(45,110,45,.15)' : 'none';
+  txt.textContent = text;
+}
+
+function fromLead(l) {
+  let extra = {};
+  try { extra = l.notes && l.notes.startsWith('{') ? JSON.parse(l.notes) : {}; } catch(e){}
+  return {
+    id: l.id,
+    name: l.homeowner_name || '',
+    firm: l.property_address || '',
+    region: l.postcode || '',
+    email: l.email || '',
+    phone: l.phone || '',
+    icp: typeof l.confidence === 'number' ? l.confidence : null,
+    value: typeof l.monthly_rent === 'number' ? l.monthly_rent : null,
+    source: l.source || '',
+    segment: l.pipeline || 'architect',
+    stage: (l.stage || 'cold').toLowerCase(),
+    notes_text: extra.notes || (typeof l.notes === 'string' && !l.notes.startsWith('{') ? l.notes : ''),
+    events: l.events || [],
+    created: l.created_at,
+    updated: l.updated_at
+  };
+}
+
+function escHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fmtMoney(n){return n==null?'—':'£'+Number(n).toLocaleString()}
+function fmtDate(iso){if(!iso)return'—';const d=new Date(iso);const days=Math.round((Date.now()-d)/86400000);if(days===0)return'Today';if(days===1)return'Yesterday';if(days<7)return days+'d ago';return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'})}
+function fmtDateLong(iso){if(!iso)return'—';return new Date(iso).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
+function rankScore(l){return (l.icp||0)*(l.stage==='engaged'?1.5:l.stage==='quoted'?1.3:1)+(l.events.length*3)+(l.stage==='won'?-1000:0)+(l.stage==='dead'?-2000:0)}
+
+function renderLive() {
+  const filtered = LEADS.filter(l => {
+    if (FILTER !== 'all' && l.stage !== FILTER) return false;
+    if (SEARCH && !((l.name||'')+' '+(l.firm||'')+' '+(l.region||'')).toLowerCase().includes(SEARCH.toLowerCase())) return false;
+    return true;
+  }).sort((a,b) => rankScore(b) - rankScore(a));
+
+  // counts
+  const counts = { all: LEADS.length };
+  ['cold','outreached','engaged','quoted','won','dead'].forEach(s => counts[s] = LEADS.filter(l => l.stage === s).length);
+  document.querySelectorAll('[data-cnt]').forEach(el => el.textContent = counts[el.dataset.cnt] || 0);
+
+  // stats
+  const active = LEADS.filter(l => !['won','dead'].includes(l.stage)).length;
+  const quoted = LEADS.filter(l => l.stage === 'quoted');
+  const won = LEADS.filter(l => l.stage === 'won');
+  const wonMonth = won.filter(l => { const d = new Date(l.updated || l.created); const n = new Date(); return d.getMonth() === n.getMonth() && d.getFullYear() === n.getFullYear(); });
+  const wonValue = wonMonth.reduce((a,l) => a + (l.value || 0), 0);
+  const quotedValue = quoted.reduce((a,l) => a + (l.value || 0), 0);
+  const set = (id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+  set('s-active', active);
+  set('s-active-d', active ? `${counts.outreached} in outreach` : 'No active leads');
+  set('s-quoted', quoted.length);
+  set('s-quoted-d', quotedValue ? fmtMoney(quotedValue) + ' open' : 'Awaiting decision');
+  set('s-engaged', counts.engaged);
+  set('s-won', wonMonth.length);
+  set('s-won-d', wonValue ? fmtMoney(wonValue) + ' booked' : 'Signed');
+
+  // hot leads
+  const hot = LEADS.filter(l => ['engaged','quoted','outreached'].includes(l.stage)).sort((a,b) => rankScore(b) - rankScore(a)).slice(0,3);
+  set('hot-fresh', LEADS.length === 0 ? '0 leads' : `${LEADS.length} lead${LEADS.length===1?'':'s'}`);
+  set('hot-source', LEADS.length === 0 ? 'Add leads to begin' : 'across all stages');
+  const hg = document.getElementById('hot-grid');
+  if (hg) {
+    if (hot.length === 0) {
+      set('hot-title', LEADS.length === 0 ? 'No leads yet' : 'No priority leads yet');
+      set('hot-sub', LEADS.length === 0 ? 'Add your first architect or builder to begin.' : 'Hot leads appear when contacts engage with outreach.');
+      hg.innerHTML = `<div style="grid-column:1/-1;font-size:13px;color:#a09c93;text-align:center;padding:32px 16px;line-height:1.6;position:relative;z-index:1">${LEADS.length === 0 ? '<b style="color:#fff">Pipeline is empty.</b><br>Click <em style="color:#d4a843;font-style:normal">+ Add lead</em> in the top right to add your first contact.' : '<b style="color:#fff">No engaged leads yet.</b><br>'+(counts.cold+counts.outreached)+' contact'+(counts.cold+counts.outreached===1?'':'s')+' sitting in cold/outreached stages.'}</div>`;
+    } else {
+      set('hot-title', hot.length === 1 ? 'One contact worth a call' : (hot.length === 2 ? 'Two' : 'Three') + ' contacts worth a call');
+      set('hot-sub', 'Ranked by ICP × engagement × recency.');
+      const labels = ['№ 01 · Highest priority','№ 02','№ 03'];
+      const actions = { engaged:'▸ Reply / call now', quoted:'▸ Chase decision', outreached:'▸ Send follow-up' };
+      hg.innerHTML = hot.map((l,i) => `
+        <button class="hot-item" onclick="openLeadDrawer('${l.id}')" style="all:unset;cursor:pointer;display:block">
+          <div class="hot-rank">${labels[i]}</div>
+          <div class="hot-name">${escHtml(l.name)}</div>
+          <div class="hot-meta">${escHtml(l.firm)}${l.region?' · '+escHtml(l.region):''}</div>
+          <div class="hot-reason">ICP <em>${l.icp ?? '—'}</em> · ${escHtml(l.stage)} · ${fmtMoney(l.value)} project${l.events.length ? ' · last touch '+fmtDate(l.updated) : ''}</div>
+          <div class="hot-action">${actions[l.stage] || '▸ Open profile'}</div>
+        </button>
+      `).join('');
+    }
+  }
+
+  // rows + drawers
+  const rowsEl = document.getElementById('rows-live');
+  if (!rowsEl) return;
+  if (filtered.length === 0) {
+    rowsEl.innerHTML = `<div style="padding:64px 28px;text-align:center;color:var(--ink3)">
+      <div style="width:48px;height:48px;border-radius:50%;background:var(--paper2);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--ink4)">⌕</div>
+      <h3 style="font-family:'Source Serif 4',serif;font-size:18px;color:var(--ink);margin-bottom:8px;font-weight:500">${LEADS.length===0?'No leads yet':'No matches'}</h3>
+      <p style="font-size:13px;max-width:440px;margin:0 auto;line-height:1.6">${LEADS.length===0?'Add your first lead manually using the button above, or wait for the scraper workflow to populate the pipeline.':'Try clearing the filter or search.'}</p>
+      ${LEADS.length===0?'<button class="btn primary" style="margin-top:18px" onclick="openAddModal()">+ Add your first lead</button>':''}
+    </div>`;
+  } else {
+    rowsEl.innerHTML = filtered.map((l,i) => `
+      <div class="row" onclick="openLeadDrawer('${l.id}')">
+        <div class="lead-rank ${i<3?'hot':''}">${i<3?'★':''}${String(i+1).padStart(2,'0')}</div>
+        <div><div class="lead-name">${escHtml(l.name)}</div><div class="lead-firm">${escHtml(l.firm)} · ${escHtml(l.segment)}</div></div>
+        <div class="lead-loc">${escHtml(l.region||'—')}<small>${escHtml(l.source||'')}</small></div>
+        <div><span class="stage-pill s-${l.stage}">${escHtml(l.stage)}</span></div>
+        <div class="lead-value">${fmtMoney(l.value)}</div>
+        <div class="lead-last">${fmtDate(l.updated)}<small>ICP ${l.icp ?? '—'}</small></div>
+        <div class="row-actions"><button class="icon-btn" onclick="event.stopPropagation();openLeadDrawer('${l.id}')" title="Open">▸</button></div>
+      </div>
+    `).join('');
+  }
+}
+
+/* ── Lead drawer (slide-in for live data) ── */
+function openLeadDrawer(id) {
+  const l = LEADS.find(x => x.id === id); if (!l) return;
+  let ovl = document.getElementById('live-drawer-ovl');
+  if (!ovl) {
+    ovl = document.createElement('div');
+    ovl.id = 'live-drawer-ovl';
+    ovl.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:50;opacity:0;pointer-events:none;transition:opacity .15s';
+    ovl.onclick = closeLeadDrawer;
+    document.body.appendChild(ovl);
+    const dr = document.createElement('aside');
+    dr.id = 'live-drawer';
+    dr.style.cssText = 'position:fixed;top:0;right:0;bottom:0;width:580px;max-width:96vw;background:#fff;box-shadow:-12px 0 40px rgba(0,0,0,.12);z-index:51;padding:28px 32px 40px;overflow-y:auto;transform:translateX(100%);transition:transform .22s ease';
+    document.body.appendChild(dr);
+  }
+  const dr = document.getElementById('live-drawer');
+  dr.innerHTML = `
+    <button onclick="closeLeadDrawer()" style="position:absolute;top:18px;right:22px;width:30px;height:30px;border-radius:50%;border:1px solid var(--rule);background:transparent;cursor:pointer;color:var(--ink2);font-size:18px;line-height:1">×</button>
+    <div class="dr-name">${escHtml(l.name)}</div>
+    <div class="dr-firm">${escHtml(l.firm)}${l.segment?' · '+escHtml(l.segment):''}</div>
+    <div class="dr-loc">${escHtml(l.region || '—')}</div>
+    <div class="dr-key">
+      <div><div class="dr-k-l">Email</div><div class="dr-k-v">${l.email?`<a href="mailto:${escHtml(l.email)}">${escHtml(l.email)}</a>`:'—'}</div></div>
+      <div><div class="dr-k-l">Phone</div><div class="dr-k-v">${l.phone?`<a href="tel:${escHtml(l.phone)}">${escHtml(l.phone)}</a>`:'—'}</div></div>
+      <div><div class="dr-k-l">ICP score</div><div class="dr-k-v">${l.icp ?? '—'}/100</div></div>
+      <div><div class="dr-k-l">Project value</div><div class="dr-k-v">${fmtMoney(l.value)}</div></div>
+      <div><div class="dr-k-l">Source</div><div class="dr-k-v">${escHtml(l.source || '—')}</div></div>
+      <div><div class="dr-k-l">Stage</div><div class="dr-k-v">
+        <select onchange="updateStage('${l.id}', this.value)" style="padding:6px 10px;border:1px solid var(--rule2);border-radius:5px;font-size:12px;font-family:inherit;background:#fff;cursor:pointer;text-transform:capitalize">
+          ${['cold','outreached','engaged','quoted','won','dead'].map(s=>`<option value="${s}"${s===l.stage?' selected':''}>${s}</option>`).join('')}
+        </select>
+      </div></div>
+    </div>
+    ${l.notes_text ? `<div class="dr-section-h">Notes</div><div style="font-size:12.5px;color:var(--ink2);line-height:1.6;margin-bottom:18px">${escHtml(l.notes_text)}</div>` : ''}
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px">
+      ${l.email?`<a class="btn" href="mailto:${escHtml(l.email)}">✉ Email</a>`:''}
+      ${l.phone?`<a class="btn" href="tel:${escHtml(l.phone)}">☎ Call</a>`:''}
+      <button class="btn" onclick="addEvent('${l.id}')">+ Log activity</button>
+    </div>
+    <div class="dr-section-h">Activity timeline</div>
+    ${(l.events && l.events.length) ? l.events.slice().reverse().map(e=>`
+      <div class="dr-tl-item"><div class="dr-tl-d">${fmtDateLong(e.ts)}</div><div class="dr-tl-c">${escHtml(e.text || '')}</div></div>
+    `).join('') : '<div style="font-size:12px;color:var(--ink3)">No activity logged yet.</div>'}
+  `;
+  document.getElementById('live-drawer-ovl').style.opacity = '1';
+  document.getElementById('live-drawer-ovl').style.pointerEvents = 'auto';
+  dr.style.transform = 'none';
+}
+function closeLeadDrawer() {
+  const ovl = document.getElementById('live-drawer-ovl'); const dr = document.getElementById('live-drawer');
+  if (ovl) { ovl.style.opacity = '0'; ovl.style.pointerEvents = 'none'; }
+  if (dr)  { dr.style.transform = 'translateX(100%)'; }
+}
+
+async function updateStage(id, stage) {
+  try {
+    await api('/api/leads/' + id, { method:'PATCH', body: JSON.stringify({ stage, event_text: 'Stage → ' + stage }) });
+    toast('Stage updated to ' + stage, 'ok');
+    await reloadLive(); openLeadDrawer(id);
+  } catch (e) { toast('Update failed: ' + e.message, 'err'); }
+}
+async function addEvent(id) {
+  const text = prompt('Activity note:'); if (!text) return;
+  try {
+    await api('/api/leads/' + id, { method:'PATCH', body: JSON.stringify({ event_text: text }) });
+    toast('Activity logged', 'ok');
+    await reloadLive(); openLeadDrawer(id);
+  } catch (e) { toast('Failed: ' + e.message, 'err'); }
+}
+
+/* ── Add lead modal ── */
+function openAddModal() {
+  if (!document.getElementById('add-modal')) buildAddModal();
+  document.getElementById('add-modal').style.display = 'flex';
+  setTimeout(() => document.querySelector('#add-form input[name=first_name]')?.focus(), 50);
+}
+function closeAddModal() {
+  const m = document.getElementById('add-modal'); if (!m) return;
+  m.style.display = 'none';
+  document.getElementById('add-form')?.reset();
+}
+function buildAddModal() {
+  const m = document.createElement('div');
+  m.id = 'add-modal';
+  m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:60;display:none;align-items:center;justify-content:center;padding:24px';
+  m.onclick = e => { if (e.target === m) closeAddModal(); };
+  m.innerHTML = `
+    <div style="background:#fff;border-radius:8px;width:540px;max-width:100%;max-height:90vh;overflow-y:auto;padding:28px 32px;box-shadow:0 20px 60px rgba(0,0,0,.2)">
+      <h2 style="font-family:'Source Serif 4',serif;font-size:20px;font-weight:500;letter-spacing:-.01em;margin-bottom:4px">Add a lead</h2>
+      <div style="font-size:12px;color:var(--ink3);margin-bottom:20px">Manually add an architect or builder to the pipeline.</div>
+      <form id="add-form" onsubmit="submitAddLead(event)">
+        <style>
+          #add-form .field{margin-bottom:14px}
+          #add-form label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);font-weight:600;margin-bottom:5px}
+          #add-form input,#add-form select,#add-form textarea{width:100%;padding:8px 11px;border:1px solid var(--rule2);border-radius:5px;font-size:13px;font-family:inherit;outline:none;background:#fff;color:var(--ink)}
+          #add-form input:focus,#add-form select:focus,#add-form textarea:focus{border-color:var(--ink)}
+          #add-form .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        </style>
+        <div class="row2">
+          <div class="field"><label>First name</label><input name="first_name" required></div>
+          <div class="field"><label>Last name</label><input name="last_name"></div>
+        </div>
+        <div class="field"><label>Firm name</label><input name="firm_name" required></div>
+        <div class="row2">
+          <div class="field"><label>Region / city</label><input name="region" placeholder="London EC1"></div>
+          <div class="field"><label>Segment</label><select name="segment"><option value="architect">Architect</option><option value="builder">Builder</option></select></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Email</label><input type="email" name="email"></div>
+          <div class="field"><label>Phone</label><input name="phone"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>ICP score (0–100)</label><input type="number" name="icp_score" min="0" max="100" value="75"></div>
+          <div class="field"><label>Project value £</label><input type="number" name="project_value" min="0" placeholder="1500"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Source</label><select name="source"><option>RIBA</option><option>Companies House</option><option>LinkedIn</option><option>FMB</option><option>Manual</option></select></div>
+          <div class="field"><label>Stage</label><select name="stage"><option value="cold">Cold</option><option value="outreached">Outreached</option><option value="engaged">Engaged</option></select></div>
+        </div>
+        <div class="field"><label>Notes</label><textarea name="notes" rows="2" placeholder="Firm size, role, recent project…"></textarea></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid var(--rule)">
+          <button type="button" class="btn" onclick="closeAddModal()">Cancel</button>
+          <button type="submit" class="btn primary" id="add-submit">Add lead</button>
+        </div>
+      </form>
+    </div>`;
+  document.body.appendChild(m);
+}
+
+async function submitAddLead(e) {
+  e.preventDefault();
+  const btn = document.getElementById('add-submit');
+  btn.disabled = true; btn.textContent = 'Adding…';
+  try {
+    const fd = Object.fromEntries(new FormData(e.target).entries());
+    const extra = {}; if (fd.notes) extra.notes = fd.notes;
+    const payload = {
+      agency_id: AGENCY,
+      homeowner_name: [fd.first_name, fd.last_name].filter(Boolean).join(' '),
+      property_address: fd.firm_name,
+      postcode: fd.region,
+      email: fd.email || '',
+      phone: fd.phone || '',
+      confidence: fd.icp_score ? Number(fd.icp_score) : null,
+      monthly_rent: fd.project_value ? Number(fd.project_value) : null,
+      source: fd.source,
+      pipeline: fd.segment,
+      stage: fd.stage,
+      notes: Object.keys(extra).length ? JSON.stringify(extra) : '',
+      event_text: 'Lead added manually'
+    };
+    await api('/api/leads', { method:'POST', body: JSON.stringify(payload) });
+    closeAddModal(); toast('Lead added', 'ok'); await reloadLive();
+  } catch (err) { toast('Failed: ' + err.message, 'err'); }
+  finally { btn.disabled = false; btn.textContent = 'Add lead'; }
+}
+
+/* ── Toast ── */
+let toastTimer;
+function toast(msg, kind) {
+  let el = document.getElementById('live-toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'live-toast';
+    el.style.cssText = 'position:fixed;bottom:24px;right:24px;color:#fff;padding:11px 18px;border-radius:6px;font-size:12.5px;z-index:80;opacity:0;transform:translateY(8px);transition:all .2s;pointer-events:none;box-shadow:0 6px 20px rgba(0,0,0,.15);max-width:380px';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.background = kind === 'err' ? '#a83232' : kind === 'ok' ? '#2d6e2d' : '#0d0d0d';
+  el.style.opacity = '1'; el.style.transform = 'none';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateY(8px)'; }, 2600);
+}
+
+/* ── Load + filters + auto-refresh ── */
+async function reloadLive(showToast) {
+  setConn(null, 'Syncing…');
+  try {
+    const r = await api('/api/leads?agency_id=' + AGENCY);
+    LEADS = (r.leads || []).map(fromLead);
+    setConn('live', 'Live · ' + LEADS.length);
+    if (showToast) toast('Synced', 'ok');
+    renderLive();
+  } catch (e) {
+    setConn('err', 'Backend offline');
+    toast('Backend error: ' + e.message, 'err');
+    console.error(e);
+  }
+}
+
+document.getElementById('live-filters')?.addEventListener('click', e => {
+  const btn = e.target.closest('.fp'); if (!btn) return;
+  document.querySelectorAll('#live-filters .fp').forEach(b => b.classList.remove('act'));
+  btn.classList.add('act');
+  FILTER = btn.dataset.stage;
+  renderLive();
+});
+document.getElementById('live-search')?.addEventListener('input', e => { SEARCH = e.target.value; renderLive(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLeadDrawer(); closeAddModal(); } });
+
+reloadLive();
+setInterval(() => reloadLive(false), 30000);
+
+/* ═════════════════════════════════════════════════════════════════ */
+/* MAKE EVERY OTHER PANEL'S BUTTONS RESPONSIVE                        */
+/* ═════════════════════════════════════════════════════════════════ */
+// Catch any button across the demo panels (outreach approve/edit, intake chase, etc.)
+// that has no explicit onclick and give it a friendly toast so the UI is never dead.
+document.addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  // Skip ones we've already wired
+  if (btn.onclick || btn.dataset.wired === '1') return;
+  if (btn.closest('#add-modal, #live-drawer, #live-filters, .top-actions, .nav, .row, .hot-item')) return;
+  if (btn.classList.contains('icon-btn') && btn.closest('#rows-live')) return;
+
+  // Outreach panel
+  if (btn.closest('#panel-outreach')) {
+    const t = btn.textContent.trim().toLowerCase();
+    if (t.includes('approve')) toast('Outreach workflow not wired yet — this will send the queued email once Gmail OAuth is connected.', 'ok');
+    else if (t.includes('edit')) toast('Template editor coming next phase.', 'ok');
+    else toast('Outreach action queued (workflow setup pending).', 'ok');
+    btn.dataset.wired = '1'; return;
+  }
+  // Inbox panel
+  if (btn.closest('#panel-inbox')) {
+    const t = btn.textContent.trim().toLowerCase();
+    if (t.includes('approve') || t.includes('send')) toast('Reply not sent — Gmail OAuth not connected yet.', 'err');
+    else if (t.includes('edit')) toast('Edit mode coming once Gmail is wired.', 'ok');
+    else toast('Inbox action acknowledged.', 'ok');
+    btn.dataset.wired = '1'; return;
+  }
+  // Intake panel
+  if (btn.closest('#panel-intake')) {
+    if (btn.textContent.trim().toLowerCase().includes('chase')) toast('Chase email queued (will fire once intake workflow is wired).', 'ok');
+    else toast('Intake action acknowledged.', 'ok');
+    btn.dataset.wired = '1'; return;
+  }
+  // Scraper panel
+  if (btn.closest('#panel-scraper')) {
+    if (btn.textContent.trim().toLowerCase().includes('edit criteria')) toast('Criteria editor coming next phase — currently configured in n8n.', 'ok');
+    else toast('Scraper control acknowledged.', 'ok');
+    btn.dataset.wired = '1'; return;
+  }
+});
+</script>
+
+</body>
+</html>
